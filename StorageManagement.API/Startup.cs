@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using StorageManagement.API.Data;
+using StorageManagement.API.Data.Repositories;
 
 namespace StorageManagement.API
 {
@@ -28,8 +29,9 @@ namespace StorageManagement.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<MainContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("StorageManagmentDatabase")));
+            services.AddEntityFrameworkSqlServer().AddDbContext<MainContext>();
+
+            services.AddTransient<IWarehouseRepository, WarehouseRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

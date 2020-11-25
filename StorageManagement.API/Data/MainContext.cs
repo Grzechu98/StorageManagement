@@ -14,6 +14,12 @@ namespace StorageManagement.API.Data
         public DbSet<ShelfModel> Shelves { get; set; }
         public DbSet<ProductModel> Products { get; set; }
         public DbSet<ContractorModel> Contractors { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=StorageManagment");
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<WarehouseModel>().HasMany(w => w.StorageRacks).WithOne(sr => sr.Warehouse);
