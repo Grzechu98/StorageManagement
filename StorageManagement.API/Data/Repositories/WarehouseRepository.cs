@@ -13,7 +13,7 @@ namespace StorageManagement.API.Data.Repositories
         Task<WarehouseModel> GetWarehouse(int id);
         Task AddWarehouse(WarehouseModel warehouse);
         Task UpdateWarehouse(WarehouseModel warehouse);
-        Task DeleteWarehouse(int id);
+        Task DeleteWarehouse(WarehouseModel warehouse);
     }
     public class WarehouseRepository : IWarehouseRepository
     {
@@ -37,11 +37,11 @@ namespace StorageManagement.API.Data.Repositories
             }
         }
 
-        public async Task DeleteWarehouse(int id)
+        public async Task DeleteWarehouse(WarehouseModel warehouse)
         {
             try
             {
-                _context.Warehouses.Remove(_context.Warehouses.FirstOrDefault(w => w.Id == id));
+                _context.Warehouses.Remove(warehouse);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
