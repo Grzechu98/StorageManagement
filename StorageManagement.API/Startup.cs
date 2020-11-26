@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using StorageManagement.API.Data;
 using StorageManagement.API.Data.Repositories;
+using StorageManagement.API.Services;
 
 namespace StorageManagement.API
 {
@@ -32,6 +33,12 @@ namespace StorageManagement.API
             services.AddEntityFrameworkSqlServer().AddDbContext<MainContext>();
 
             services.AddTransient<IWarehouseRepository, WarehouseRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IStorageRackRepository, StorageRackRepository>();
+            services.AddTransient<IShelfRepository, ShelfRepository>();
+            services.AddTransient<IContractorRepository, ContractorRepository>();
+
+            services.AddTransient<IWarehouseService, WarehouseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +48,7 @@ namespace StorageManagement.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors("AllowAllHeaders");
             app.UseHttpsRedirection();
 
             app.UseRouting();
