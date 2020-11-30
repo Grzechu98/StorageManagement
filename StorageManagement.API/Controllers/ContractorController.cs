@@ -36,7 +36,12 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{NIP}/TotalStock")]
         public async Task<ActionResult<ContractorModel>> GetContractorModel(string NIP)
         {
-           
+            var stock = await _warehouseService.GetContractorStockDetails(await _repository.GetContractor(e => e.NIP == NIP));
+            if (stock == null)
+            {
+                return NotFound();
+            }
+            return Ok(stock);
         }
 
         // GET: api/Contractor/9090909090/WarehouseStock/1
@@ -44,7 +49,10 @@ namespace StorageManagement.API.Controllers
         public async Task<ActionResult<IDictionary<string,StockHelper>>> GetWarehouseStockDetails(string NIP,int warehouseId)
         {
             var stock = await _warehouseService.GetContractorStockDetails(warehouseId, await _repository.GetContractor(e => e.NIP == NIP));
-
+            if (stock == null)
+            {
+                return NotFound();
+            }
             return Ok(stock);
         }
 

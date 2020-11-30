@@ -27,8 +27,9 @@ namespace StorageManagement.API.Services
     {
         Task<string> GetStockStatus(int id);
         Task<string> GetStockStatus(int id,ContractorModel model);
-        Task<ICollection<StockHelper>> GetContractorStockDetails(int id,ContractorModel model);
-        
+        Task<IDictionary<string, StockHelper>> GetContractorStockDetails(int id,ContractorModel model);
+        Task<ICollection<IDictionary<string, StockHelper>>> GetContractorStockDetails(ContractorModel model);
+
     }
     public class WarehouseService : IWarehouseService
     {
@@ -106,6 +107,20 @@ namespace StorageManagement.API.Services
             return result;
 
 
+        }
+
+        public async Task<ICollection<IDictionary<string, StockHelper>>> GetContractorStockDetails(ContractorModel model)
+        {
+            var warehouses = await _repository.GetWarehouses();
+
+            IList<IDictionary<string, StockHelper>> result = new List<IDictionary<string, StockHelper>>();
+
+            foreach (var item in warehouses)
+            {
+                result.Add(await GetContractorStockDetails(item.Id, model));
+            }
+
+            return result;
         }
     }
 }
