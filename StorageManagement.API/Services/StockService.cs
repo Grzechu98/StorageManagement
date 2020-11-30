@@ -23,7 +23,7 @@ namespace StorageManagement.API.Services
     }
 
 
-    public interface IWarehouseService
+    public interface IStockService
     {
         Task<string> GetStockStatus(int id);
         Task<string> GetStockStatus(int id,ContractorModel model);
@@ -31,10 +31,10 @@ namespace StorageManagement.API.Services
         Task<ICollection<IDictionary<string, StockHelper>>> GetContractorStockDetails(ContractorModel model);
 
     }
-    public class WarehouseService : IWarehouseService
+    public class StockService : IStockService
     {
         private readonly IWarehouseRepository _repository;
-        public WarehouseService(IWarehouseRepository repository)
+        public StockService(IWarehouseRepository repository)
         {
             _repository = repository;
         }
@@ -89,7 +89,7 @@ namespace StorageManagement.API.Services
 
             IDictionary<string, StockHelper> result = new Dictionary<string, StockHelper>();
 
-            foreach (var item in warehouse.StorageRacks)
+            foreach (var item in warehouse.StorageRacks.Where(w => w.Contractor == model))
             {
                 foreach (var i in item.Shelves)
                 {

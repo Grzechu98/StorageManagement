@@ -17,12 +17,12 @@ namespace StorageManagement.API.Controllers
     public class ContractorController : ControllerBase
     {
         private readonly IContractorRepository _repository;
-        private readonly IWarehouseService _warehouseService;
+        private readonly IStockService _stockeService;
 
-        public ContractorController(IContractorRepository repository, IWarehouseService warehouseService)
+        public ContractorController(IContractorRepository repository, IStockService stockeService)
         {
             _repository = repository;
-            _warehouseService = warehouseService;
+            _stockeService = stockeService;
         }
 
         // GET: api/Contractor
@@ -36,7 +36,7 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{NIP}/TotalStock")]
         public async Task<ActionResult<ContractorModel>> GetContractorModel(string NIP)
         {
-            var stock = await _warehouseService.GetContractorStockDetails(await _repository.GetContractor(e => e.NIP == NIP));
+            var stock = await _stockeService.GetContractorStockDetails(await _repository.GetContractor(e => e.NIP == NIP));
             if (stock == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{NIP}/WarehouseStock/{WarehouseId}")]
         public async Task<ActionResult<IDictionary<string,StockHelper>>> GetWarehouseStockDetails(string NIP,int warehouseId)
         {
-            var stock = await _warehouseService.GetContractorStockDetails(warehouseId, await _repository.GetContractor(e => e.NIP == NIP));
+            var stock = await _stockeService.GetContractorStockDetails(warehouseId, await _repository.GetContractor(e => e.NIP == NIP));
             if (stock == null)
             {
                 return NotFound();
@@ -61,9 +61,9 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{NIP}/FreeStorageSpaceInWarehouse/{WarehouseId}")]
         public async Task<ActionResult<string>> GetFreeStorageSpaceInWarehouse(string NIP, int warehouseId)
         {
-            var stockStatus = await _warehouseService.GetStockStatus(warehouseId, await _repository.GetContractor(e => e.NIP == NIP));
+            var stockStatus = await _stockeService.GetStockStatus(warehouseId, await _repository.GetContractor(e => e.NIP == NIP));
 
-            return stockStatus;
+            return Ok(stockStatus);
         }
 
     }

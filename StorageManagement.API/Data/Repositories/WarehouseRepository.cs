@@ -52,7 +52,7 @@ namespace StorageManagement.API.Data.Repositories
 
         public async Task<WarehouseModel> GetWarehouse(int id)
         {
-            return await _context.Warehouses.Include(e =>e.StorageRacks).ThenInclude(sr => sr.Shelves).ThenInclude(s => s.Product).FirstOrDefaultAsync(w => w.Id == id);
+            return await _context.Warehouses.Include(e =>e.StorageRacks).ThenInclude(sr => sr.Shelves).ThenInclude(s => s.Product).Include(sr => sr.StorageRacks).ThenInclude(sr => sr.Contractor).FirstOrDefaultAsync(w => w.Id == id);
         }
 
         public async Task<ICollection<WarehouseModel>> GetWarehouses()

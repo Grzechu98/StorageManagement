@@ -38,7 +38,7 @@ namespace StorageManagement.API
             services.AddTransient<IShelfRepository, ShelfRepository>();
             services.AddTransient<IContractorRepository, ContractorRepository>();
 
-            services.AddTransient<IWarehouseService, WarehouseService>();
+            services.AddTransient<IStockService, StockService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

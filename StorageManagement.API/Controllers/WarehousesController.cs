@@ -18,12 +18,12 @@ namespace StorageManagement.API.Controllers
     {
 
         private readonly IWarehouseRepository _repository;
-        private readonly IWarehouseService _warehouseService;
+        private readonly IStockService _stockeService;
 
-        public WarehousesController(IWarehouseRepository repository, IWarehouseService warehouseService)
+        public WarehousesController(IWarehouseRepository repository, IStockService stockeService)
         {
             _repository = repository;
-            _warehouseService = warehouseService;
+            _stockeService = stockeService;
         }
 
         // GET: api/Warehouses
@@ -52,7 +52,7 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{id}/stockstatus")]
         public async Task<ActionResult<string>> GetStockStatus(int id)
         {
-            return await _warehouseService.GetStockStatus(id);
+            return await _stockeService.GetStockStatus(id);
         }
 
         // PUT: api/Warehouses/5

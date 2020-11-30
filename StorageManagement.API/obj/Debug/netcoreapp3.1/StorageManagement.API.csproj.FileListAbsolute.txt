@@ -7,7 +7,6 @@ D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\bin\Debug\net
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\bin\Debug\netcoreapp3.1\StorageManagement.API.runtimeconfig.dev.json
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\bin\Debug\netcoreapp3.1\StorageManagement.API.dll
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\bin\Debug\netcoreapp3.1\StorageManagement.API.pdb
-D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\obj\Debug\netcoreapp3.1\StorageManagement.API.csprojAssemblyReference.cache
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\obj\Debug\netcoreapp3.1\StorageManagement.API.AssemblyInfoInputs.cache
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\obj\Debug\netcoreapp3.1\StorageManagement.API.AssemblyInfo.cs
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\obj\Debug\netcoreapp3.1\StorageManagement.API.RazorTargetAssemblyInfo.cache

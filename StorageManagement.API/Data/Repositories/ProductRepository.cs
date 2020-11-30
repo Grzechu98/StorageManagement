@@ -61,7 +61,7 @@ namespace StorageManagement.API.Data.Repositories
 
         public async Task<ICollection<ProductModel>> GetProducts(Func<ProductModel, bool> condition)
         {
-            return await _context.Products.Where(condition).AsQueryable().ToListAsync();
+            return await _context.Products.Include(p=>p.Shelf).ThenInclude(s=> s.Rack).Where(condition).AsQueryable().ToListAsync();
         }
 
         public async Task UpdateProduct(ProductModel Product)
