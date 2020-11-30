@@ -10,6 +10,7 @@ namespace StorageManagement.API.Data.Repositories
     public interface IContractorRepository
     {
         Task<ICollection<ContractorModel>> GetContractos(Func<ContractorModel, bool> condition);
+        Task<ICollection<ContractorModel>> GetContractos();
         Task<ContractorModel> GetContractor(int id);
         Task<ContractorModel> GetContractor(Func<ContractorModel, bool> condition);
         Task AddContractor(ContractorModel contractor);
@@ -51,19 +52,22 @@ namespace StorageManagement.API.Data.Repositories
 
         public async Task<ContractorModel> GetContractor(int id)
         {
-            return await _context.Contractors.FirstOrDefaultAsync(s => s.Id == id);
+            return await _context.Contractors.Include(c => c.Racks).ThenInclude(r => r.Shelves).ThenInclude(s => s.Product).FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<ContractorModel> GetContractor(Func<ContractorModel, bool> condition)
         {
-            return _context.Contractors.Where(condition).FirstOrDefault();
+            return _context.Contractors.Include(c => c.Racks).ThenInclude(r => r.Shelves).ThenInclude(s => s.Product).Where(condition).FirstOrDefault();
         }
 
         public async Task<ICollection<ContractorModel>> GetContractos(Func<ContractorModel, bool> condition)
         {
             return await _context.Contractors.Where(condition).AsQueryable().ToListAsync();
         }
-
+        public async Task<ICollection<ContractorModel>> GetContractos()
+        {
+            return await _context.Contractors.ToListAsync();
+        }
         public async Task UpdateContractor(ContractorModel contractor)
         {
             _context.Contractors.Update(contractor);

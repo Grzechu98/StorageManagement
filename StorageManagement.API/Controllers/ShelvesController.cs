@@ -17,7 +17,7 @@ namespace StorageManagement.API.Controllers
     {
         private readonly IShelfRepository _repository;
 
-        public ShelvesController(MainContext context, IShelfRepository repository)
+        public ShelvesController(IShelfRepository repository)
         {
             _repository = repository;
         }
