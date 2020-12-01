@@ -15,5 +15,10 @@ namespace StorageManagement.API.Models
         [Required]
         public WarehouseModel Warehouse { get; set; }
         public ICollection<ShelfModel> Shelves { get; set; }
+
+        public void CheckIfHasSpace()
+        {
+            IsTaken = !this.Shelves.Where(e => e.Product == null).Any();
+        }
     }
 }

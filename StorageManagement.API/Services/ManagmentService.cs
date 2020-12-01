@@ -70,7 +70,11 @@ namespace StorageManagement.API.Services
             {
                 foreach (var i in item.Shelves)
                 {
-                    if (i.Product == null) return i;
+                    if (i.Product == null)
+                    {
+                        item.CheckIfHasSpace();
+                        return i;
+                    }
                 }
             }
             return null;
@@ -84,7 +88,11 @@ namespace StorageManagement.API.Services
             {
                 foreach (var i in item.Shelves)
                 {
-                    if (i.Product == null) return i;
+                    if (i.Product == null) {
+                        item.CheckIfHasSpace();
+                        return i; 
+                    }
+                    
                 }
             }
             return null;
