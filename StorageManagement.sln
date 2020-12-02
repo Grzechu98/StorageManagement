@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageManagement.API", "StorageManagement.API\StorageManagement.API.csproj", "{B21B8EEA-A28E-4160-9DF3-85AA12A5747D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageManagement.API", "StorageManagement.API\StorageManagement.API.csproj", "{B21B8EEA-A28E-4160-9DF3-85AA12A5747D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageManagment.Tests", "StorageManagment.Tests\StorageManagment.Tests.csproj", "{B1680B8B-5FAF-4D71-86D2-6C8B982E6C3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B21B8EEA-A28E-4160-9DF3-85AA12A5747D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B21B8EEA-A28E-4160-9DF3-85AA12A5747D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B21B8EEA-A28E-4160-9DF3-85AA12A5747D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1680B8B-5FAF-4D71-86D2-6C8B982E6C3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1680B8B-5FAF-4D71-86D2-6C8B982E6C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1680B8B-5FAF-4D71-86D2-6C8B982E6C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1680B8B-5FAF-4D71-86D2-6C8B982E6C3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

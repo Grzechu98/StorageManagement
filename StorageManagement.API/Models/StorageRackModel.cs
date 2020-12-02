@@ -12,7 +12,7 @@ namespace StorageManagement.API.Models
         public string RackNumber { get; set; }
         public bool IsTaken { get; set; }
         public ContractorModel Contractor { get; set; }
-        [Required]
+        
         public WarehouseModel Warehouse { get; set; }
         public ICollection<ShelfModel> Shelves { get; set; }
 

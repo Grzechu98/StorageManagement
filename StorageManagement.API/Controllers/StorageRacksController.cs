@@ -63,6 +63,7 @@ namespace StorageManagement.API.Controllers
         [HttpPost]
         public async Task<ActionResult<StorageRackModel>> PostStorageRackModel(StorageRackModel storageRackModel)
         {
+            
             await _repository.AddStorageRack(storageRackModel);
             return CreatedAtAction("GetStorageRackModel", new { id = storageRackModel.Id }, storageRackModel);
         }

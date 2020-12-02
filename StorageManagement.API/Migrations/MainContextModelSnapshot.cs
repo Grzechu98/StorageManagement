@@ -100,7 +100,7 @@ namespace StorageManagement.API.Migrations
                     b.Property<string>("RackNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("WarehouseId")
+                    b.Property<int?>("WarehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -171,9 +171,7 @@ namespace StorageManagement.API.Migrations
 
                     b.HasOne("StorageManagement.API.Models.WarehouseModel", "Warehouse")
                         .WithMany("StorageRacks")
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WarehouseId");
 
                     b.Navigation("Contractor");
 
