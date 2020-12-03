@@ -38,7 +38,7 @@ namespace StorageManagement.API.Services
         public async Task<ProductModel> AllocateProductToStoragePlace(ProductModel product, int warehouseId)
         {
             product.Shelf = await FindEmptySpace(warehouseId);
-            product.Shelf.Quantity++;
+            product.Shelf.Quantity=1;
             await _productRepository.UpdateProduct(product);
             return product;
         }

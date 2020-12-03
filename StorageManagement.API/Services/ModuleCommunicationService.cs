@@ -12,9 +12,9 @@ namespace StorageManagement.API.Services
     public interface IModuleCommunicationService
     {
         Task<ContractorModel> GetContractorFromContractorsModule(string NIP);
-        Task<ProductModel> GetProductFromProductsModule(string Name);
+        Task<ProductModel> GetProductFromProductsModule(int Id);
         Task<ContractorModel> GetContractor(string NIP);
-        Task<ProductModel> GetProduct(string Name);
+        Task<ProductModel> GetProduct(int Id);
 
     }
     public class ModuleCommunicationService : IModuleCommunicationService
@@ -53,17 +53,12 @@ namespace StorageManagement.API.Services
 
         }
 
-        public async Task<ProductModel> GetProduct(string Name)
+        public async Task<ProductModel> GetProduct(int Id)
         {
-            var product = await _productrRepository.GetProduct(p => p.Name == Name);
-            if (product == null)
-            {
-                return await GetProductFromProductsModule(Name);
-            }
-            return product;
+            return await GetProductFromProductsModule(Id);
         }
 
-        public async Task<ProductModel> GetProductFromProductsModule(string Name)
+        public async Task<ProductModel> GetProductFromProductsModule(int Id)
         {
             ProductModel product = null;
             HttpClient client = new HttpClient();

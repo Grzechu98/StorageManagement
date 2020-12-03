@@ -22,16 +22,16 @@ namespace StorageManagement.API.Controllers
             _managmentService = managmentService;
         }
 
-        [HttpPost("PlaceProduct/{Name}")]
-        public async Task PlaceProduct(string Name, [FromBody] JObject data) {
+        [HttpPost("PlaceProduct/{Id}")]
+        public async Task PlaceProduct(int Id, [FromBody] JObject data) {
             
-            await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Name), Int32.Parse(data["warehouseId"].ToString()));
+            await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Id), Int32.Parse(data["warehouseId"].ToString()));
         }
 
         [HttpPost("PlaceContractorProduct")]
         public async Task PlaceProduct([FromBody] JObject data)
         {
-            await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(data["Name"].ToString()),await _communicationService.GetContractor(data["NIP"].ToString()), Int32.Parse(data["warehouseId"].ToString()));
+            await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Int32.Parse(data["Id"].ToString())),await _communicationService.GetContractor(data["NIP"].ToString()), Int32.Parse(data["warehouseId"].ToString()));
         }
         [HttpPost("ContractorRack")]
         public async Task AssignContractorRack([FromBody] JObject data)
