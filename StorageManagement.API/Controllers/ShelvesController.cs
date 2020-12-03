@@ -41,13 +41,13 @@ namespace StorageManagement.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutShelfModel(int id, ShelfModel shelfModel)
         {
-            if (id != shelfModel.Id)
+            if (id != shelfModel.Id || !ModelState.IsValid)
             {
                 return BadRequest();
             }
             try
             {
-                await _repository.AddShelf(shelfModel);
+                await _repository.UpdateShelf(shelfModel);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -63,7 +63,10 @@ namespace StorageManagement.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ShelfModel>> PostShelfModel(ShelfModel shelfModel)
         {
-
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             await _repository.AddShelf(shelfModel);
 
             return CreatedAtAction("GetShelfModel", new { id = shelfModel.Id }, shelfModel);

@@ -27,7 +27,7 @@ namespace StorageManagement.API.Data.Repositories
         {
             try
             {
-                await _context.Shelves.AddAsync(shelf);
+                 _context.Shelves.Add(shelf);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -56,7 +56,7 @@ namespace StorageManagement.API.Data.Repositories
 
         public async Task<ShelfModel> GetShelf(Func<ShelfModel, bool> condition)
         {
-            return _context.Shelves.Where(condition).FirstOrDefault();
+            return await _context.Shelves.Where(condition).AsQueryable().FirstOrDefaultAsync();
         }
 
         public async Task<ICollection<ShelfModel>> GetShelves(Func<ShelfModel, bool> condition)

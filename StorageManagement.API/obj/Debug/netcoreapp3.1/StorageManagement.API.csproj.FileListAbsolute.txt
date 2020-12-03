@@ -154,5 +154,7 @@ D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\bin\Debug\net
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\obj\Debug\netcoreapp3.1\StorageManagement.API.csprojAssemblyReference.cache
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\obj\Debug\netcoreapp3.1\StorageManagement.API.csproj.CoreCompileInputs.cache
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagement.API\obj\Debug\netcoreapp3.1\StorageManagement.API.MvcApplicationPartsAssemblyInfo.cache

@@ -116,6 +116,19 @@ namespace StorageManagment.Tests
         }
 
         [Fact]
+        public async Task GetWarehouseStockStatus_Test_ValidData()
+        {
+            // Arrange
+            var request = "api/Warehouses/1/stockstatus";
+
+            // Act
+            var response = await client.GetAsync(request);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
         public async Task PostWarehouse_Test_InvalidData()
         {
             // Arrange

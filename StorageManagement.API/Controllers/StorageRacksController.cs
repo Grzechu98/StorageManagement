@@ -41,7 +41,7 @@ namespace StorageManagement.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStorageRackModel(int id, StorageRackModel storageRackModel)
         {
-            if (id != storageRackModel.Id)
+            if (id != storageRackModel.Id || !ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -63,7 +63,11 @@ namespace StorageManagement.API.Controllers
         [HttpPost]
         public async Task<ActionResult<StorageRackModel>> PostStorageRackModel(StorageRackModel storageRackModel)
         {
-            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             await _repository.AddStorageRack(storageRackModel);
             return CreatedAtAction("GetStorageRackModel", new { id = storageRackModel.Id }, storageRackModel);
         }

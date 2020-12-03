@@ -29,15 +29,17 @@ namespace StorageManagement.API.Services
         }
         public async Task<ProductModel> AllocateProductToStoragePlace(ProductModel product, ContractorModel contractor, int warehouseId)
         {
-            product.Shelf = await FindEmptySpace(warehouseId);
-            await _productRepository.AddProduct(product);
+            product.Shelf = await FindEmptySpace(warehouseId, contractor);
+            product.Shelf.Quantity++;
+            await _productRepository.UpdateProduct(product);
             return product;
         }
 
         public async Task<ProductModel> AllocateProductToStoragePlace(ProductModel product, int warehouseId)
         {
             product.Shelf = await FindEmptySpace(warehouseId);
-            await _productRepository.AddProduct(product);
+            product.Shelf.Quantity++;
+            await _productRepository.UpdateProduct(product);
             return product;
         }
 

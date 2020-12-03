@@ -50,9 +50,10 @@ namespace StorageManagement.API.Services
         public async Task<string> GetStockStatus(int id, ContractorModel model)
         {
             var warehouse = await _repository.GetWarehouse(id);
-
-            int total = CountWarehouseTotalStorageSpace(warehouse.StorageRacks.Where(w => w.Contractor == model).AsEnumerable());
-            int free = CountWarehouseFreeStorageSpace(warehouse.StorageRacks.Where(w => w.Contractor == model).AsEnumerable());
+            var racks = warehouse.StorageRacks.Where(w => w.Contractor == model).AsEnumerable();
+            int free = CountWarehouseFreeStorageSpace(racks);
+            int total = CountWarehouseTotalStorageSpace(racks);
+            
 
             return free + "/" + total;
         }
@@ -77,7 +78,8 @@ namespace StorageManagement.API.Services
            
             foreach (var item in racks)
             {
-                freespace += item.Shelves.Where(s => s.Product == null).ToList().Count;
+                var test = item.Shelves.Where(s => s.Product == null).ToList().Count;
+                freespace += test;
             }
             
             return freespace;
@@ -88,25 +90,30 @@ namespace StorageManagement.API.Services
             var warehouse = await _repository.GetWarehouse(id);
 
             IDictionary<string, StockHelper> result = new Dictionary<string, StockHelper>();
-
-            foreach (var item in warehouse.StorageRacks.Where(w => w.Contractor == model))
+            var contractorRacks = warehouse.StorageRacks.Where(w => w.Contractor == model);
+            foreach (var item in contractorRacks)
             {
                 foreach (var i in item.Shelves)
                 {
-                    if (result.ContainsKey(i.Product.Name))
+                    if (i.Product == null)
                     {
-                        result[i.Product.Name].Quantity++;
-                        result[i.Product.Name].CountValue(i.Product.Value);
+
                     }
                     else
                     {
-                        result.Add(i.Product.Name, new StockHelper(i.Quantity, i.Product.Value));
+                        if (result.ContainsKey(i.Product.Name))
+                        {
+                            result[i.Product.Name].Quantity++;
+                            result[i.Product.Name].CountValue(i.Product.Value);
+                        }
+                        else
+                        {
+                            result.Add(i.Product.Name, new StockHelper(i.Quantity, i.Product.Value));
+                        }
                     }
                 }
             }
             return result;
-
-
         }
 
         public async Task<ICollection<IDictionary<string, StockHelper>>> GetContractorStockDetails(ContractorModel model)

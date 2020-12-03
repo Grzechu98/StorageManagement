@@ -1,4 +1,5 @@
-﻿using StorageManagement.API.Data.Repositories;
+﻿using Newtonsoft.Json.Linq;
+using StorageManagement.API.Data.Repositories;
 using StorageManagement.API.Models;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,8 @@ namespace StorageManagement.API.Services
             
             if (response.IsSuccessStatusCode)
             {
-                contractor = await response.Content.ReadAsAsync<ContractorModel>();
+                var jobject = await response.Content.ReadAsAsync<JObject>();
+                contractor = new ContractorModel { Name = jobject["name"].ToString(), NIP = jobject["NIP"].ToString() };
             }
             return contractor;
 
@@ -69,7 +71,8 @@ namespace StorageManagement.API.Services
 
             if (response.IsSuccessStatusCode)
             {
-                product = await response.Content.ReadAsAsync<ProductModel>();
+                var jobject = await response.Content.ReadAsAsync<JObject>();
+                product = new ProductModel { Name = jobject["name"].ToString(), Value = Decimal.Parse(jobject["value"].ToString()) };
             }
             return product;
         }

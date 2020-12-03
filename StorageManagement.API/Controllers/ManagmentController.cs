@@ -23,8 +23,9 @@ namespace StorageManagement.API.Controllers
         }
 
         [HttpPost("PlaceProduct/{Name}")]
-        public async Task PlaceProduct(string Name, [FromBody] int warehouseId) {
-            await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Name), warehouseId);
+        public async Task PlaceProduct(string Name, [FromBody] JObject data) {
+            
+            await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Name), Int32.Parse(data["warehouseId"].ToString()));
         }
 
         [HttpPost("PlaceContractorProduct")]

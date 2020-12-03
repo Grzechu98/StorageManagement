@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using FluentAssertions;
+using Newtonsoft.Json;
 using StorageManagement.API.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -15,13 +17,15 @@ namespace StorageManagment.Tests
         {
 
             // Arrange
-            var warehousereq = await client.GetAsync("api/Warehouses/1");
-            var warhouse = JsonConvert.DeserializeObject<WarehouseModel>(await warehousereq.Content.ReadAsStringAsync());
-            StorageRackModel model = new StorageRackModel { RackNumber = "A1", IsTaken = false, Warehouse = warhouse };
             var request = new
             {
                 Url = "api/StorageRacks",
-                Body = model
+                Body = new
+                {
+                    RackNumber = "A1",
+                    IsTaken = false,
+                    WarehouseId = 1
+                }
             };
             // Act
             var response = await client.PostAsync(request.Url, JsonHelper.TransformToJson(request.Body));
@@ -30,21 +34,19 @@ namespace StorageManagment.Tests
             // Assert
             response.EnsureSuccessStatusCode();
         }
-       /* [Fact]
-        public async Task PutWarehouse_Test_ValidData()
+        [Fact]
+        public async Task PutRack_Test_ValidData()
         {
             // Arrange
             var request = new
             {
-                Url = "api/Warehouses/1",
+                Url = "api/StorageRacks/1",
                 Body = new
                 {
                     Id = 1,
-                    Name = "testPut",
-                    City = "testCity",
-                    Street = "test",
-                    UnitNumber = "33",
-                    PostCode = "35-221"
+                    RackNumber = "A1",
+                    IsTaken = true,
+                    WarehouseId = 1
                 }
             };
             // Act
@@ -54,51 +56,34 @@ namespace StorageManagment.Tests
             response.EnsureSuccessStatusCode();
         }
         [Fact]
-        public async Task DeleteWarehouse_Test_ValidData()
+        public async Task DeleteStorageRack_Test_ValidData()
         {
             // Arrange
             var Postrequest = new
             {
-                Url = "api/Warehouses",
+                Url = "api/StorageRacks",
                 Body = new
                 {
-                    Name = "test",
-                    City = "testCity",
-                    Street = "test",
-                    UnitNumber = "33",
-                    PostCode = "35-221"
+                    RackNumber = "A2",
+                    IsTaken = false,
+                    WarehouseId = 1
                 }
             };
             // Act
             var postresponse = await client.PostAsync(Postrequest.Url, JsonHelper.TransformToJson(Postrequest.Body));
             var PostResponseJson = await postresponse.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<WarehouseModel>(PostResponseJson);
+            var responseObj = JsonConvert.DeserializeObject<StorageRackModel>(PostResponseJson);
 
-            var delResponse = await client.DeleteAsync(string.Format("api/Warehouses/" + responseObj.Id));
+            var delResponse = await client.DeleteAsync(string.Format("api/StorageRacks/" + responseObj.Id));
             // Assert
             postresponse.EnsureSuccessStatusCode();
-
-
-
             delResponse.EnsureSuccessStatusCode();
         }
         [Fact]
-        public async Task GetWarehouses_Test()
+        public async Task GetStorageRack_Test_ValidData()
         {
             // Arrange
-            var request = "/api/Warehouses";
-            // Act
-            var response = await client.GetAsync(request);
-
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        }
-
-        [Fact]
-        public async Task GetWarehouse_Test_ValidData()
-        {
-            // Arrange
-            var request = "/api/Warehouses/1";
+            var request = "/api/StorageRacks/1";
 
             // Act
             var response = await client.GetAsync(request);
@@ -108,15 +93,18 @@ namespace StorageManagment.Tests
         }
 
         [Fact]
-        public async Task PostWarehouse_Test_InvalidData()
+        public async Task PostStorageRack_Test_InvalidData()
         {
             // Arrange
             var request = new
             {
-                Url = "api/Warehouses",
+                Url = "api/StorageRacks",
                 Body = new
                 {
-                    Name = "test",
+                    Id = 1,
+                    RackNumber = "A1",
+                    IsTaken = "badrequest",
+                    WarehouseId = 1
                 }
             };
             // Act
@@ -127,12 +115,12 @@ namespace StorageManagment.Tests
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
         [Fact]
-        public async Task PutWarehouse_Test_InvalidData()
+        public async Task PutStorageRack_Test_InvalidData()
         {
             // Arrange
             var request = new
             {
-                Url = "api/Warehouses/1",
+                Url = "api/StorageRacks/1",
                 Body = new
                 {
                     Id = 5,
@@ -150,37 +138,35 @@ namespace StorageManagment.Tests
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
         [Fact]
-        public async Task DeleteWarehouse_Test_InvalidData()
+        public async Task DeleteStorageRack_Test_InvalidData()
         {
             // Arrange
             var Postrequest = new
             {
-                Url = "api/Warehouses",
+                Url = "api/StorageRacks",
                 Body = new
                 {
-                    Name = "test",
-                    City = "testCity",
-                    Street = "test",
-                    UnitNumber = "33",
-                    PostCode = "35-221"
+                    RackNumber = "A2",
+                    IsTaken = true,
+                    WarehouseId = 1
                 }
             };
             // Act
             var postresponse = await client.PostAsync(Postrequest.Url, JsonHelper.TransformToJson(Postrequest.Body));
             var PostResponseJson = await postresponse.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<WarehouseModel>(PostResponseJson);
+            var responseObj = JsonConvert.DeserializeObject<StorageRackModel>(PostResponseJson);
 
-            var delResponse = await client.DeleteAsync(string.Format("api/Warehouses/" + responseObj.Id + 1999992));
+            var delResponse = await client.DeleteAsync(string.Format("api/StorageRacks/" + responseObj.Id + 1999992));
             // Assert
             postresponse.EnsureSuccessStatusCode();
             delResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
-        public async Task GetWarehouse_Test_InvalidData()
+        public async Task GetStorageRack_Test_InvalidData()
         {
             // Arrange
-            var request = "/api/Warehouses/1999992";
+            var request = "/api/StorageRacks/1999992";
 
             // Act
             var response = await client.GetAsync(request);
@@ -188,5 +174,5 @@ namespace StorageManagment.Tests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
-    */}
+    }
 }

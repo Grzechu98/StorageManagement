@@ -61,7 +61,7 @@ namespace StorageManagement.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutWarehouseModel(int id, WarehouseModel warehouseModel)
         {
-            if (id != warehouseModel.Id)
+            if (id != warehouseModel.Id || !ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -84,6 +84,10 @@ namespace StorageManagement.API.Controllers
         [HttpPost]
         public async Task<ActionResult<WarehouseModel>> PostWarehouseModel(WarehouseModel warehouseModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             await _repository.AddWarehouse(warehouseModel);
 
             return CreatedAtAction("GetWarehouseModel", new { id = warehouseModel.Id }, warehouseModel);

@@ -36,18 +36,13 @@ namespace StorageManagement.API.Controllers
             return Ok(productModel);
         }
 
-        // GET: api/Products/NAME
-        [HttpGet("{Name}")]
-        public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModel(string name)
+        // GET: api/Products/ByName/NAME
+        [HttpGet("ByName/{Name}")]
+        public async Task<ActionResult<ICollection<ProductModel>>> GetProductModel(string name)
         {
-            var productModel = await _repository.GetProducts(e => e.Name == name);
+            var products = await _repository.GetProducts(e => e.Name == name);
 
-            if (productModel == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(productModel);
+            return Ok(products);
         }
     }
 }

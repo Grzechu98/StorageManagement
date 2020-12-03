@@ -62,7 +62,7 @@ namespace StorageManagement.API.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -77,7 +77,8 @@ namespace StorageManagement.API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ProductId] IS NOT NULL");
 
                     b.HasIndex("RackId");
 
@@ -100,7 +101,7 @@ namespace StorageManagement.API.Migrations
                     b.Property<string>("RackNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("WarehouseId")
+                    b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -148,9 +149,7 @@ namespace StorageManagement.API.Migrations
                 {
                     b.HasOne("StorageManagement.API.Models.ProductModel", "Product")
                         .WithOne("Shelf")
-                        .HasForeignKey("StorageManagement.API.Models.ShelfModel", "ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StorageManagement.API.Models.ShelfModel", "ProductId");
 
                     b.HasOne("StorageManagement.API.Models.StorageRackModel", "Rack")
                         .WithMany("Shelves")
@@ -171,7 +170,9 @@ namespace StorageManagement.API.Migrations
 
                     b.HasOne("StorageManagement.API.Models.WarehouseModel", "Warehouse")
                         .WithMany("StorageRacks")
-                        .HasForeignKey("WarehouseId");
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Contractor");
 

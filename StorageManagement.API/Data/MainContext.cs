@@ -22,8 +22,8 @@ namespace StorageManagement.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ShelfModel>().ToTable("Shelves");
             modelBuilder.Entity<WarehouseModel>().HasMany(w => w.StorageRacks).WithOne(sr => sr.Warehouse);
-            modelBuilder.Entity<StorageRackModel>().HasOne(w => w.Warehouse).WithMany(sr => sr.StorageRacks);
             modelBuilder.Entity<StorageRackModel>().HasMany(sr => sr.Shelves).WithOne(s => s.Rack);
             modelBuilder.Entity<ContractorModel>().HasMany(c => c.Racks).WithOne(sr => sr.Contractor);
             modelBuilder.Entity<ProductModel>().HasOne(p => p.Shelf).WithOne(s => s.Product).HasForeignKey<ShelfModel>(s => s.ProductId);

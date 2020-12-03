@@ -505,3 +505,5 @@ D:\ASPNET\StorageManagment\StorageManagement\StorageManagment.Tests\bin\Debug\ne
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagment.Tests\bin\Debug\netcoreapp3.1\System.IO.Pipelines.dll
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagment.Tests\bin\Debug\netcoreapp3.1\FluentAssertions.dll
 D:\ASPNET\StorageManagment\StorageManagement\StorageManagment.Tests\obj\Debug\netcoreapp3.1\StorageManagment.Tests.csproj.CoreCompileInputs.cache
+D:\ASPNET\StorageManagment\StorageManagement\StorageManagment.Tests\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+D:\ASPNET\StorageManagment\StorageManagement\StorageManagment.Tests\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll

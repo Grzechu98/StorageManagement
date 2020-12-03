@@ -32,6 +32,11 @@ namespace StorageManagement.API
             services.AddControllers();
             services.AddEntityFrameworkSqlServer().AddDbContext<MainContext>();
 
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
+
             services.AddTransient<IWarehouseRepository, WarehouseRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IStorageRackRepository, StorageRackRepository>();
