@@ -18,7 +18,7 @@ namespace StorageManagement.API.Controllers
         private readonly IManagmentService _managmentService;
         public ManagmentController(IModuleCommunicationService communicationService, IManagmentService managmentService)
         {
-            _communicationService = communicationService;
+            _communicationService = communicationService; 
             _managmentService = managmentService;
         }
 
