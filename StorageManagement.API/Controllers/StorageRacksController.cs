@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using StorageManagement.API.Data;
 using StorageManagement.API.Data.Repositories;
 using StorageManagement.API.Models;
+using StorageManagement.API.Services;
 
 namespace StorageManagement.API.Controllers
 {
@@ -16,10 +17,12 @@ namespace StorageManagement.API.Controllers
     public class StorageRacksController : ControllerBase
     {
         private readonly IStorageRackRepository _repository;
+        private readonly IValidator _validator;
 
-        public StorageRacksController(IStorageRackRepository repository)
+        public StorageRacksController(IStorageRackRepository repository, IValidator validator)
         {
             _repository = repository;
+            _validator = validator;
         }
         // GET: api/StorageRacks/5
         [HttpGet("{id}")]
@@ -41,7 +44,7 @@ namespace StorageManagement.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStorageRackModel(int id, StorageRackModel storageRackModel)
         {
-            if (id != storageRackModel.Id || !ModelState.IsValid)
+            if (id != storageRackModel.Id || !ModelState.IsValid || await _validator.IsRackNumberInDb(storageRackModel))
             {
                 return BadRequest();
             }
@@ -63,7 +66,7 @@ namespace StorageManagement.API.Controllers
         [HttpPost]
         public async Task<ActionResult<StorageRackModel>> PostStorageRackModel(StorageRackModel storageRackModel)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || await _validator.IsRackNumberInDb(storageRackModel))
             {
                 return BadRequest();
             }

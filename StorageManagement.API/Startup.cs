@@ -36,6 +36,17 @@ namespace StorageManagement.API
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllHeaders",
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin()
+                                 .AllowAnyHeader()
+                                 .AllowAnyMethod();
+                      });
+            });
+            services.AddTransient<IValidator, Validator>();
 
             services.AddTransient<IWarehouseRepository, WarehouseRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();

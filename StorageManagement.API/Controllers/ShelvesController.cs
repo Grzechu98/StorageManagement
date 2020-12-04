@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using StorageManagement.API.Data;
 using StorageManagement.API.Data.Repositories;
 using StorageManagement.API.Models;
+using StorageManagement.API.Services;
 
 namespace StorageManagement.API.Controllers
 {
@@ -16,10 +17,11 @@ namespace StorageManagement.API.Controllers
     public class ShelvesController : ControllerBase
     {
         private readonly IShelfRepository _repository;
-
-        public ShelvesController(IShelfRepository repository)
+        private readonly IValidator _validator;
+        public ShelvesController(IShelfRepository repository, IValidator validator)
         {
             _repository = repository;
+            _validator = validator;
         }
         // GET: api/Shelves/5
         [HttpGet("{id}")]
@@ -41,7 +43,7 @@ namespace StorageManagement.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutShelfModel(int id, ShelfModel shelfModel)
         {
-            if (id != shelfModel.Id || !ModelState.IsValid)
+            if (id != shelfModel.Id || !ModelState.IsValid || await _validator.IsShelfNumberInDb(shelfModel))
             {
                 return BadRequest();
             }
@@ -63,7 +65,7 @@ namespace StorageManagement.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ShelfModel>> PostShelfModel(ShelfModel shelfModel)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || await _validator.IsShelfNumberInDb(shelfModel))
             {
                 return BadRequest();
             }
