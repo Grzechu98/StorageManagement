@@ -46,6 +46,7 @@ namespace StorageManagement.API
                                  .AllowAnyMethod();
                       });
             });
+            services.AddTransient<IValidator, Validator>();
 
             services.AddTransient<IWarehouseRepository, WarehouseRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();

@@ -45,7 +45,7 @@ namespace StorageManagement.API.Services
             int total = CountWarehouseTotalStorageSpace(warehouse.StorageRacks);
             int free = CountWarehouseFreeStorageSpace(warehouse.StorageRacks);
 
-            return free + "/" + total;
+            return "Aktualne zapełnienie: " + (total - free) + "/" + total;
         }
         public async Task<string> GetStockStatus(int id, ContractorModel model)
         {
@@ -55,7 +55,7 @@ namespace StorageManagement.API.Services
             int total = CountWarehouseTotalStorageSpace(racks);
             
 
-            return free + "/" + total;
+            return "Aktualne zapełnienie: "+ (total-free) + "/" + total;
         }
 
         private int CountWarehouseTotalStorageSpace(IEnumerable<StorageRackModel> model)
