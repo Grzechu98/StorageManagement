@@ -51,12 +51,12 @@ namespace StorageManagement.API.Data.Repositories
 
         public async Task<ProductModel> GetProduct(int id)
         {
-            return await _context.Products.FirstOrDefaultAsync(s => s.Id == id);
+            return await _context.Products.Include(p => p.Shelf).ThenInclude(s => s.Rack).FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<ProductModel> GetProduct(Func<ProductModel, bool> condition)
         {
-            return _context.Products.Where(condition).FirstOrDefault();
+            return _context.Products.Include(p => p.Shelf).ThenInclude(s => s.Rack).Where(condition).FirstOrDefault();
         }
 
         public async Task<ICollection<ProductModel>> GetProducts(Func<ProductModel, bool> condition)

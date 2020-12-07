@@ -15,7 +15,7 @@ namespace StorageManagment.Tests
         {
             // Arrange
             var request = new {
-                Url = "api/Managment/PlaceProduct/PlacementTest",
+                Url = "api/Managment/PlaceProduct/1",
                 Body = new
                 {
                     warehouseId = 1
@@ -37,7 +37,7 @@ namespace StorageManagment.Tests
                 Url = "api/Managment/ContractorRack",
                 Body = new
                 {
-                    NIP = "0123456789",
+                    NIP = "0113456789",
                     warehouseId = 1
                 }
             };
@@ -58,7 +58,7 @@ namespace StorageManagment.Tests
                 Url = "api/Managment/PlaceContractorProduct",
                 Body = new
                 {
-                    Name = "TestCo",
+                    Id = 1,
                     NIP = "0123456789",
                     warehouseId = 1
                 }
@@ -72,6 +72,26 @@ namespace StorageManagment.Tests
             response.EnsureSuccessStatusCode();
         }
 
+        [Fact]
+        public async Task AssignContractorRack_Test_InvalidData()
+        {
+            // Arrange
+            var request = new
+            {
+                Url = "api/Managment/ContractorRack",
+                Body = new
+                {
+                    NIP = "111111111",
+                    warehouseId = 1
+                }
+            };
+
+            // Act
+            var response = await client.PostAsync(request.Url, JsonHelper.TransformToJson(request.Body));
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
 
 
     }

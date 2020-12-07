@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using StorageManagement.API.Data;
 using StorageManagement.API.Data.Repositories;
 using StorageManagement.API.Models;
@@ -52,7 +53,8 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{id}/stockstatus")]
         public async Task<ActionResult<string>> GetStockStatus(int id)
         {
-            return await _stockeService.GetStockStatus(id);
+            var jsonStock = JObject.Parse(await _stockeService.GetStockStatus(id));
+            return Ok(jsonStock);
         }
 
         // PUT: api/Warehouses/5

@@ -51,7 +51,7 @@ namespace StorageManagement.API.Data.Repositories
 
         public async Task<ShelfModel> GetShelf(int id)
         {
-           return await _context.Shelves.FirstOrDefaultAsync(s => s.Id == id);
+           return await _context.Shelves.Include(s=>s.Product).FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<ShelfModel> GetShelf(Func<ShelfModel, bool> condition)

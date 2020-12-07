@@ -51,7 +51,7 @@ namespace StorageManagement.API.Data.Repositories
 
         public async Task<StorageRackModel> GetStorageRack(int id)
         {
-            return await _context.StorageRacks.Include(sr => sr.Shelves).ThenInclude(s => s.Product).FirstOrDefaultAsync(sr => sr.Id == id);
+            return await _context.StorageRacks.Include(sr => sr.Shelves).ThenInclude(s => s.Product).AsNoTracking().FirstOrDefaultAsync(sr => sr.Id == id);
         }
 
         public async Task<StorageRackModel> GetStorageRack(Func<StorageRackModel, bool> condition)

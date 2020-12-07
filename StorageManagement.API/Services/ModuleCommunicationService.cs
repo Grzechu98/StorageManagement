@@ -3,6 +3,7 @@ using StorageManagement.API.Data.Repositories;
 using StorageManagement.API.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -41,14 +42,18 @@ namespace StorageManagement.API.Services
         public async Task<ContractorModel> GetContractorFromContractorsModule(string NIP)
         {
             ContractorModel contractor = null;
-            HttpClient client = new HttpClient();
+            /*HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync("");
             
             if (response.IsSuccessStatusCode)
             {
                 var jobject = await response.Content.ReadAsAsync<JObject>();
-                contractor = new ContractorModel { Name = jobject["name"].ToString(), NIP = jobject["NIP"].ToString() };
+                contractor = new ContractorModel { Name = jobject["name"].ToString(), NIP = jobject["NIP"].ToString(), Racks = new List<StorageRackModel>() };
             }
+            */
+            // rozwiązanie tymczasowe request do api drugiego modułu zastępuje odczyt z pliku
+            JObject jobject = JObject.Parse(File.ReadAllText(@"contractor.json"));
+            contractor = new ContractorModel { Name = jobject["name"].ToString(), NIP = jobject["NIP"].ToString(), Racks = new List<StorageRackModel>() };
             return contractor;
 
         }
@@ -61,14 +66,18 @@ namespace StorageManagement.API.Services
         public async Task<ProductModel> GetProductFromProductsModule(int Id)
         {
             ProductModel product = null;
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync("");
+            /* HttpClient client = new HttpClient();
+             HttpResponseMessage response = await client.GetAsync("");
 
-            if (response.IsSuccessStatusCode)
-            {
-                var jobject = await response.Content.ReadAsAsync<JObject>();
-                product = new ProductModel { Name = jobject["name"].ToString(), Value = Decimal.Parse(jobject["value"].ToString()) };
-            }
+             if (response.IsSuccessStatusCode)
+             {
+                 var jobject = await response.Content.ReadAsAsync<JObject>();
+                 product = new ProductModel { Name = jobject["name"].ToString(), Value = Decimal.Parse(jobject["value"].ToString()) };
+             }
+             */
+            // rozwiązanie tymczasowe request do api drugiego modułu zastępuje odczyt z pliku
+            JObject jobject = JObject.Parse(File.ReadAllText(@"product.json"));
+            product = new ProductModel { Name= jobject["name"].ToString(),Value= Decimal.Parse(jobject["value"].ToString()) };
             return product;
         }
     }

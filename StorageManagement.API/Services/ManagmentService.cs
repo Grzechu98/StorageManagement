@@ -13,7 +13,7 @@ namespace StorageManagement.API.Services
         Task<ProductModel> AllocateProductToStoragePlace(ProductModel product, int warehouseId);
         Task<ShelfModel> FindEmptySpace(int warehouseId);
         Task<ShelfModel> FindEmptySpace(int warehouseId,ContractorModel contractor);
-        Task AssingRackToContractor(ContractorModel contractor, int warehouseId);
+        Task<ContractorModel> AssingRackToContractor(ContractorModel contractor, int warehouseId);
         Task<StorageRackModel> FindEmptyRack(int warehouseId);
     }
     public class ManagmentService : IManagmentService
@@ -29,24 +29,39 @@ namespace StorageManagement.API.Services
         }
         public async Task<ProductModel> AllocateProductToStoragePlace(ProductModel product, ContractorModel contractor, int warehouseId)
         {
-            product.Shelf = await FindEmptySpace(warehouseId, contractor);
-            product.Shelf.Quantity++;
-            await _productRepository.UpdateProduct(product);
+            var shelf = await FindEmptySpace(warehouseId, contractor);
+            if (shelf != null)
+            {
+                product.Shelf = shelf;
+                product.Shelf.Quantity = 1;
+                product.Shelf.Rack.CheckIfHasSpace();
+                await _productRepository.UpdateProduct(product);
+            }
             return product;
         }
 
         public async Task<ProductModel> AllocateProductToStoragePlace(ProductModel product, int warehouseId)
         {
-            product.Shelf = await FindEmptySpace(warehouseId);
-            product.Shelf.Quantity=1;
-            await _productRepository.UpdateProduct(product);
+            var shelf = await FindEmptySpace(warehouseId);
+            if (shelf != null)
+            {
+                product.Shelf = shelf;
+                product.Shelf.Quantity = 1;
+                product.Shelf.Rack.CheckIfHasSpace();
+                await _productRepository.UpdateProduct(product);
+            }
             return product;
         }
 
-        public async Task AssingRackToContractor(ContractorModel contractor, int warehouseId)
+        public async Task<ContractorModel> AssingRackToContractor(ContractorModel contractor, int warehouseId)
         {
-            contractor.Racks.Add(await FindEmptyRack(warehouseId));
-            await _contractorRepository.UpdateContractor(contractor);   
+            var rack = await FindEmptyRack(warehouseId);
+            if (rack != null)
+            {
+                contractor.Racks.Add(rack);
+                await _contractorRepository.UpdateContractor(contractor);
+            }
+            return contractor;
         }
 
         public async Task<StorageRackModel> FindEmptyRack(int warehouseId)

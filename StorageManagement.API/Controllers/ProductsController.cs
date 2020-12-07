@@ -44,5 +44,19 @@ namespace StorageManagement.API.Controllers
 
             return Ok(products);
         }
+        // DELETE: api/Products/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ProductModel>> DeleteProductModel(int id)
+        {
+            var productModel = await _repository.GetProduct(id);
+
+            if (productModel == null)
+            {
+                return NotFound();
+            }
+            await _repository.DeleteProduct(productModel);
+
+            return productModel;
+        }
     }
 }

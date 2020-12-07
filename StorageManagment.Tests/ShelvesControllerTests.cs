@@ -22,7 +22,7 @@ namespace StorageManagment.Tests
                 Url = "api/Shelves",
                 Body = new
                 {
-                    ShelfNumber = "3",
+                    ShelfNumber = "4post",
                     Quantity = 1,
                     RackId = 2
                 }
@@ -64,7 +64,7 @@ namespace StorageManagment.Tests
                 Url = "api/Shelves",
                 Body = new
                 {
-                    ShelfNumber = "4",
+                    ShelfNumber = "3del",
                     Quantity = 1,
                     RackId = 1
                 }

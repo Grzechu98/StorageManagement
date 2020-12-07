@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using StorageManagement.API.Data;
 using StorageManagement.API.Data.Repositories;
 using StorageManagement.API.Models;
@@ -62,8 +63,8 @@ namespace StorageManagement.API.Controllers
         public async Task<ActionResult<string>> GetFreeStorageSpaceInWarehouse(string NIP, int warehouseId)
         {
             var stockStatus = await _stockeService.GetStockStatus(warehouseId, await _repository.GetContractor(e => e.NIP == NIP));
-
-            return Ok(stockStatus);
+            JObject statusJson = JObject.Parse(stockStatus);
+            return Ok(statusJson);
         }
 
     }

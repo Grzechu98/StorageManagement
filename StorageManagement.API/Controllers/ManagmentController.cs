@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using StorageManagement.API.Models;
 using StorageManagement.API.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,20 +24,36 @@ namespace StorageManagement.API.Controllers
         }
 
         [HttpPost("PlaceProduct/{Id}")]
-        public async Task PlaceProduct(int Id, [FromBody] JObject data) {
-            
-            await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Id), Int32.Parse(data["warehouseId"].ToString()));
+        public async Task<ActionResult<ProductModel>> PlaceProduct(int Id, [FromBody] JObject data) {
+            var res = await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Id), Int32.Parse(data["warehouseId"].ToString()));
+            if (res.Shelf == null)
+            {
+                return BadRequest();
+            }
+            return Ok(res);
         }
 
         [HttpPost("PlaceContractorProduct")]
-        public async Task PlaceProduct([FromBody] JObject data)
+        public async Task<ActionResult<ProductModel>> PlaceProduct([FromBody] JObject data)
         {
-            await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Int32.Parse(data["Id"].ToString())),await _communicationService.GetContractor(data["NIP"].ToString()), Int32.Parse(data["warehouseId"].ToString()));
+            var res = await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Int32.Parse(data["Id"].ToString())),
+                await _communicationService.GetContractor(data["NIP"].ToString()), Int32.Parse(data["warehouseId"].ToString()));
+            if (res.Shelf == null)
+            {
+                return BadRequest();
+            }
+            return Ok(res);
         }
         [HttpPost("ContractorRack")]
-        public async Task AssignContractorRack([FromBody] JObject data)
+        public async Task<IActionResult> AssignContractorRack([FromBody] JObject data)
         {
-            await _managmentService.AssingRackToContractor(await _communicationService.GetContractor(data["NIP"].ToString()), Int32.Parse(data["warehouseId"].ToString()));
+            var contractor = await _communicationService.GetContractor(data["NIP"].ToString());
+            if (contractor == null)
+            {
+                return BadRequest();
+            }
+            await _managmentService.AssingRackToContractor(contractor, Int32.Parse(data["warehouseId"].ToString()));
+            return Ok();
         }
     }
 }

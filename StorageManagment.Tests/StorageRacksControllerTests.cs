@@ -22,7 +22,7 @@ namespace StorageManagment.Tests
                 Url = "api/StorageRacks",
                 Body = new
                 {
-                    RackNumber = "A1",
+                    RackNumber = "A2Test",
                     IsTaken = false,
                     WarehouseId = 1
                 }
@@ -64,7 +64,7 @@ namespace StorageManagment.Tests
                 Url = "api/StorageRacks",
                 Body = new
                 {
-                    RackNumber = "A2",
+                    RackNumber = "A1Deltest",
                     IsTaken = false,
                     WarehouseId = 1
                 }
@@ -146,7 +146,7 @@ namespace StorageManagment.Tests
                 Url = "api/StorageRacks",
                 Body = new
                 {
-                    RackNumber = "A2",
+                    RackNumber = "A2121Deltest",
                     IsTaken = true,
                     WarehouseId = 1
                 }
