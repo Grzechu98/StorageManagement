@@ -22,7 +22,7 @@ namespace StorageManagment.Tests
                 Url = "api/Shelves",
                 Body = new
                 {
-                    ShelfNumber = "4post",
+                    ShelfNumber = "4 post test",
                     Quantity = 1,
                     RackId = 2
                 }
@@ -40,12 +40,12 @@ namespace StorageManagment.Tests
             // Arrange
             var request = new
             {
-                Url = "api/Shelves/14",
+                Url = "api/Shelves/1",
                 Body = new
                 {
-                    Id = 14,
-                    ShelfNumber = "4",
-                    Quantity = 1,
+                    Id = 1,
+                    ShelfNumber = "1",
+                    Quantity = 0,
                     RackId = 1
                 }
             };
@@ -83,7 +83,7 @@ namespace StorageManagment.Tests
         public async Task GetShelf_Test_ValidData()
         {
             // Arrange
-            var request = "/api/Shelves/14";
+            var request = "/api/Shelves/1";
 
             // Act
             var response = await client.GetAsync(request);

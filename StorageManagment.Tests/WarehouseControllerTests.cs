@@ -24,8 +24,8 @@ namespace StorageManagment.Tests
                 Url = "api/Warehouses",
                 Body = new
                 {
-                    Name = "test",
-                    City = "testCity",
+                    Name = "Magazyn Test",
+                    City = "test",
                     Street = "test",
                     UnitNumber = "33",
                     PostCode = "35-221"
@@ -48,11 +48,11 @@ namespace StorageManagment.Tests
                 Body = new
                 {
                     Id = 1,
-                    Name = "testPut",
-                    City = "testCity",
-                    Street = "test",
-                    UnitNumber = "33",
-                    PostCode = "35-221"
+                    Name = "Magazyn 1",
+                    City = "Rzeszów",
+                    Street = "Eugeniusza Kwiatkowskiego",
+                    UnitNumber = "45",
+                    PostCode = "35-311"
                 }
             };
             // Act
@@ -85,9 +85,6 @@ namespace StorageManagment.Tests
             var delResponse = await client.DeleteAsync(string.Format("api/Warehouses/"+ responseObj.Id));
             // Assert
             postresponse.EnsureSuccessStatusCode();
-
-            
-
             delResponse.EnsureSuccessStatusCode();
         }
         [Fact]
