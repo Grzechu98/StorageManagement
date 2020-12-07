@@ -17,7 +17,7 @@ namespace StorageManagement.API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=StorageManagment");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=StorageManagmentTest");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

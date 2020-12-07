@@ -22,7 +22,7 @@ namespace StorageManagment.Tests
                 Url = "api/Shelves",
                 Body = new
                 {
-                    ShelfNumber = "4 post test",
+                    ShelfNumber = "post_test1",
                     Quantity = 1,
                     RackId = 2
                 }

@@ -22,7 +22,7 @@ namespace StorageManagment.Tests
                 Url = "api/StorageRacks",
                 Body = new
                 {
-                    RackNumber = "D1",
+                    RackNumber = "D4 test",
                     IsTaken = false,
                     WarehouseId = 1
                 }
@@ -136,30 +136,6 @@ namespace StorageManagment.Tests
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        }
-        [Fact]
-        public async Task DeleteStorageRack_Test_InvalidData()
-        {
-            // Arrange
-            var Postrequest = new
-            {
-                Url = "api/StorageRacks",
-                Body = new
-                {
-                    RackNumber = "A2121Deltest",
-                    IsTaken = true,
-                    WarehouseId = 1
-                }
-            };
-            // Act
-            var postresponse = await client.PostAsync(Postrequest.Url, JsonHelper.TransformToJson(Postrequest.Body));
-            var PostResponseJson = await postresponse.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<StorageRackModel>(PostResponseJson);
-
-            var delResponse = await client.DeleteAsync(string.Format("api/StorageRacks/" + responseObj.Id + 1999992));
-            // Assert
-            postresponse.EnsureSuccessStatusCode();
-            delResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]

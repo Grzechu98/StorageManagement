@@ -18,20 +18,23 @@ namespace StorageManagement.API.Services
     {
         private readonly MainContext _context;
         
+        
         public Validator(MainContext context)
         {
             _context = context;
         }
         public async Task<bool> IsRackNumberInDb(StorageRackModel model)
         {
-            if (model.Id == 0) return await _context.StorageRacks.AsNoTracking().Where(sr => sr.RackNumber == model.RackNumber).AnyAsync();
-            return await _context.StorageRacks.AsNoTracking().Where(sr => sr.RackNumber == model.RackNumber && sr.Id != model.Id).AnyAsync();
+            var warehouse = await _context.Warehouses.AsNoTracking().Include(r => r.StorageRacks).FirstOrDefaultAsync(e => e.Id == model.WarehouseId);
+            if (model.Id == 0) return warehouse.StorageRacks.Where(sr => sr.RackNumber == model.RackNumber).Any();
+            return warehouse.StorageRacks.Where(sr => sr.RackNumber == model.RackNumber && sr.Id != model.Id).Any();
         }
 
         public async Task<bool> IsShelfNumberInDb(ShelfModel model)
         {
-            if(model.Id == 0) return await _context.Shelves.AsNoTracking().Where(sr => sr.ShelfNumber == model.ShelfNumber).AnyAsync();
-            return await _context.Shelves.AsNoTracking().Where(sr => sr.ShelfNumber == model.ShelfNumber && sr.Id != model.Id).AnyAsync();
+            var rack = await _context.StorageRacks.AsNoTracking().Include(sr => sr.Shelves).FirstOrDefaultAsync(e => e.Id == model.RackId);
+            if(model.Id == 0) return rack.Shelves.Where(sr => sr.ShelfNumber == model.ShelfNumber).Any();
+            return rack.Shelves.Where(sr => sr.ShelfNumber == model.ShelfNumber && sr.Id != model.Id).Any();
         }
     }
 }
