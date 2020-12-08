@@ -63,8 +63,7 @@ namespace StorageManagement.API.Controllers
         public async Task<ActionResult<string>> GetFreeStorageSpaceInWarehouse(string NIP, int warehouseId)
         {
             var stockStatus = await _stockeService.GetStockStatus(warehouseId, await _repository.GetContractor(e => e.NIP == NIP));
-            JObject statusJson = JObject.Parse(stockStatus);
-            return Ok(statusJson);
+            return Ok(stockStatus);
         }
 
     }

@@ -53,8 +53,7 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{id}/stockstatus")]
         public async Task<ActionResult<string>> GetStockStatus(int id)
         {
-            var jsonStock = JObject.Parse(await _stockeService.GetStockStatus(id));
-            return Ok(jsonStock);
+            return Ok(await _stockeService.GetStockStatus(id));
         }
 
         // PUT: api/Warehouses/5

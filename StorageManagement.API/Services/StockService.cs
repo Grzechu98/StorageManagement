@@ -25,8 +25,8 @@ namespace StorageManagement.API.Services
 
     public interface IStockService
     {
-        Task<string> GetStockStatus(int id);
-        Task<string> GetStockStatus(int id,ContractorModel model);
+        Task<IDictionary<string, int>> GetStockStatus(int id);
+        Task<IDictionary<string, int>> GetStockStatus(int id,ContractorModel model);
         Task<IDictionary<string, StockHelper>> GetContractorStockDetails(int id,ContractorModel model);
         Task<ICollection<IDictionary<string, StockHelper>>> GetContractorStockDetails(ContractorModel model);
 
@@ -38,24 +38,32 @@ namespace StorageManagement.API.Services
         {
             _repository = repository;
         }
-        public async Task<string> GetStockStatus(int id)
+        public async Task<IDictionary<string, int>> GetStockStatus(int id)
         {
+            IDictionary<string, int> status = new Dictionary<string, int>();
             var warehouse = await _repository.GetWarehouse(id);
             
             int total = CountWarehouseTotalStorageSpace(warehouse.StorageRacks);
             int free = CountWarehouseFreeStorageSpace(warehouse.StorageRacks);
+            status.Add("FreeSpace", free);
+            status.Add("TakenSpace", (total - free));
+            status.Add("TotalSpace", total);
 
-            return @"{CurrentFreeSpace:'" + free + "/" + total + "'}"; ;
+            return status;
         }
-        public async Task<string> GetStockStatus(int id, ContractorModel model)
+        public async Task<IDictionary<string,int>> GetStockStatus(int id, ContractorModel model)
         {
+            IDictionary<string, int> status = new Dictionary<string, int>();
             var warehouse = await _repository.GetWarehouse(id);
             var racks = warehouse.StorageRacks.Where(w => w.Contractor == model).AsEnumerable();
             int free = CountWarehouseFreeStorageSpace(racks);
             int total = CountWarehouseTotalStorageSpace(racks);
-            
+            status.Add("FreeSpace", free);
+            status.Add("TakenSpace", (total-free));
+            status.Add("TotalSpace", total);
 
-            return @"{CurrentFreeSpace:'"+ free + "/" + total+"'}";
+
+            return status;
         }
 
         private int CountWarehouseTotalStorageSpace(IEnumerable<StorageRackModel> model)
