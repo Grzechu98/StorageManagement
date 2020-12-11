@@ -54,6 +54,7 @@ namespace StorageManagement.API
             services.AddTransient<IShelfRepository, ShelfRepository>();
             services.AddTransient<IContractorRepository, ContractorRepository>();
 
+            services.AddTransient<IModuleCommunicationMocker, ModuleCommunicationMocker>();
             services.AddTransient<IManagmentService, ManagmentService>();
             services.AddTransient<IStockService, StockService>();
             services.AddTransient<IModuleCommunicationService, ModuleCommunicationService>();

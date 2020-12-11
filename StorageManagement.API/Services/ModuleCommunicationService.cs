@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using StorageManagement.API.Data.Repositories;
 using StorageManagement.API.Models;
 using System;
@@ -16,17 +17,20 @@ namespace StorageManagement.API.Services
         Task<ProductModel> GetProductFromProductsModule(int Id);
         Task<ContractorModel> GetContractor(string NIP);
         Task<ProductModel> GetProduct(int Id);
-
     }
     public class ModuleCommunicationService : IModuleCommunicationService
     {
         private readonly IContractorRepository _contractorRepository;
         private readonly IProductRepository _productrRepository;
+        private readonly IConfiguration _config;
+        private readonly IModuleCommunicationMocker _mocker;
 
-        public ModuleCommunicationService(IContractorRepository contractorRepository, IProductRepository productrRepository)
+        public ModuleCommunicationService(IModuleCommunicationMocker mocker,IConfiguration config,IContractorRepository contractorRepository, IProductRepository productrRepository)
         {
             _contractorRepository = contractorRepository;
             _productrRepository = productrRepository;
+            _config = config;
+            _mocker = mocker;
         }
 
         public async Task<ContractorModel> GetContractor(string NIP)
@@ -42,18 +46,19 @@ namespace StorageManagement.API.Services
         public async Task<ContractorModel> GetContractorFromContractorsModule(string NIP)
         {
             ContractorModel contractor = null;
-            /*HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync("");
-            
-            if (response.IsSuccessStatusCode)
+            if (_config["ContractorsAPI"].Equals("")) contractor = await _mocker.MockContractor();
+            else
             {
-                var jobject = await response.Content.ReadAsAsync<JObject>();
-                contractor = new ContractorModel { Name = jobject["name"].ToString(), NIP = jobject["NIP"].ToString(), Racks = new List<StorageRackModel>() };
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.GetAsync(_config["ContractorsAPI"] + "/" + NIP);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jobject = await response.Content.ReadAsAsync<JObject>();
+                    contractor = new ContractorModel { Name = jobject["name"].ToString(), NIP = jobject["NIP"].ToString(), Racks = new List<StorageRackModel>() };
+                }
             }
-            */
-            // rozwiązanie tymczasowe request do api drugiego modułu zastępuje odczyt z pliku
-            JObject jobject = JObject.Parse(File.ReadAllText(@"contractor.json"));
-            contractor = new ContractorModel { Name = jobject["name"].ToString(), NIP = jobject["NIP"].ToString(), Racks = new List<StorageRackModel>() };
+            
             return contractor;
 
         }
@@ -66,18 +71,20 @@ namespace StorageManagement.API.Services
         public async Task<ProductModel> GetProductFromProductsModule(int Id)
         {
             ProductModel product = null;
-            /* HttpClient client = new HttpClient();
-             HttpResponseMessage response = await client.GetAsync("");
+            string test = _config["ProductsAPI"];
+            if (test.Equals("")) product = await _mocker.MockProduct();
+            else
+            {
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.GetAsync(_config["ProductsAPI"]+"/"+Id);
 
-             if (response.IsSuccessStatusCode)
-             {
-                 var jobject = await response.Content.ReadAsAsync<JObject>();
-                 product = new ProductModel { Name = jobject["name"].ToString(), Value = Decimal.Parse(jobject["value"].ToString()) };
-             }
-             */
-            // rozwiązanie tymczasowe request do api drugiego modułu zastępuje odczyt z pliku
-            JObject jobject = JObject.Parse(File.ReadAllText(@"product.json"));
-            product = new ProductModel { Name= jobject["name"].ToString(),Value= Decimal.Parse(jobject["value"].ToString()) };
+                if (response.IsSuccessStatusCode)
+                {
+                    var jobject = await response.Content.ReadAsAsync<JObject>();
+                    product = new ProductModel { Name = jobject["name"].ToString(), Value = Decimal.Parse(jobject["value"].ToString()) };
+                }
+            }
+            
             return product;
         }
     }

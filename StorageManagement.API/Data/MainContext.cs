@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using StorageManagement.API.Models;
 using System;
 using System.Collections.Generic;
@@ -9,17 +10,22 @@ namespace StorageManagement.API.Data
 {
     public class MainContext : DbContext
     {
+        private readonly IConfiguration _config;
+
         public DbSet<WarehouseModel> Warehouses { get; set; }
         public DbSet<StorageRackModel> StorageRacks { get; set; }
         public DbSet<ShelfModel> Shelves { get; set; }
         public DbSet<ProductModel> Products { get; set; }
         public DbSet<ContractorModel> Contractors { get; set; }
 
+        public MainContext(IConfiguration config)
+        {
+            _config = config;
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=StorageManagmentTest");
+            optionsBuilder.UseSqlServer(_config.GetConnectionString("Db"));
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ShelfModel>().ToTable("Shelves");
