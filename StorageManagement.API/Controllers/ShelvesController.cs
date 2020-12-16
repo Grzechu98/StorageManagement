@@ -18,10 +18,12 @@ namespace StorageManagement.API.Controllers
     {
         private readonly IShelfRepository _repository;
         private readonly IValidator _validator;
-        public ShelvesController(IShelfRepository repository, IValidator validator)
+        private readonly IDeleteService _deleteService;
+        public ShelvesController(IShelfRepository repository, IValidator validator, IDeleteService deleteService)
         {
             _repository = repository;
             _validator = validator;
+            _deleteService = deleteService;
         }
         // GET: api/Shelves/5
         [HttpGet("{id}")]
@@ -83,11 +85,15 @@ namespace StorageManagement.API.Controllers
             {
                 return NotFound();
             }
-
-
-            await _repository.DeleteShelf(shelfModel);
-
-            return shelfModel;
+            if (await _deleteService.CanDeleteShelf(shelfModel))
+            {
+                await _repository.DeleteShelf(shelfModel);
+                return shelfModel;
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

@@ -18,11 +18,13 @@ namespace StorageManagement.API.Controllers
     {
         private readonly IStorageRackRepository _repository;
         private readonly IValidator _validator;
+        private readonly IDeleteService _deleteService;
 
-        public StorageRacksController(IStorageRackRepository repository, IValidator validator)
+        public StorageRacksController(IStorageRackRepository repository, IValidator validator, IDeleteService deleteService)
         {
             _repository = repository;
             _validator = validator;
+            _deleteService = deleteService;
         }
         // GET: api/StorageRacks/5
         [HttpGet("{id}")]
@@ -84,10 +86,16 @@ namespace StorageManagement.API.Controllers
             {
                 return NotFound();
             }
+            if (await _deleteService.CanDeleteRack(storageRackModel))
+            {
+                await _repository.DeleteStorageRack(storageRackModel);
 
-            await _repository.DeleteStorageRack(storageRackModel);
-
-            return storageRackModel;
+                return storageRackModel;
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

@@ -31,7 +31,7 @@ namespace StorageManagement.API
         {
             services.AddControllers();
             services.AddEntityFrameworkSqlServer().AddDbContext<MainContext>();
-
+            services.AddMvc();
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -54,6 +54,7 @@ namespace StorageManagement.API
             services.AddTransient<IShelfRepository, ShelfRepository>();
             services.AddTransient<IContractorRepository, ContractorRepository>();
 
+            services.AddTransient<IDeleteService, DeleteService>();
             services.AddTransient<IModuleCommunicationMocker, ModuleCommunicationMocker>();
             services.AddTransient<IManagmentService, ManagmentService>();
             services.AddTransient<IStockService, StockService>();

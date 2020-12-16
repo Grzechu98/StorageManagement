@@ -19,5 +19,10 @@ namespace StorageManagement.API.Models
         public int RackId { get; set; }
         public int? ProductId { get; set; }
         public ProductModel Product { get; set; }
+
+        public bool HasProduct()
+        {
+            return ProductId != null;
+        }
     }
 }

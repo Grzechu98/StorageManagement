@@ -12,4 +12,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <Value>workstation id=StorageManagmentDB.mssql.somee.com%3bpacket size=4096%3buser id=IOApi_SQLLogin_1%3bpwd=yk8sdd4ktr%3bdata source=StorageManagmentDB.mssql.somee.com%3bpersist security info=False%3binitial catalog=StorageManagmentDB</Value>
     </DestinationConnectionStrings>
   </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="StorageManagement.API.Data.MainContext">
+      <Value>workstation id=StorageManagmentDB.mssql.somee.com%3bpacket size=4096%3buser id=IOApi_SQLLogin_1%3bpwd=yk8sdd4ktr%3bdata source=StorageManagmentDB.mssql.somee.com%3bpersist security info=False%3binitial catalog=StorageManagmentDB</Value>
+    </EFMigrations>
+  </ItemGroup>
 </Project>

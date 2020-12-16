@@ -20,11 +20,13 @@ namespace StorageManagement.API.Controllers
 
         private readonly IWarehouseRepository _repository;
         private readonly IStockService _stockeService;
+        private readonly IDeleteService _deleteService;
 
-        public WarehousesController(IWarehouseRepository repository, IStockService stockeService)
+        public WarehousesController(IWarehouseRepository repository, IStockService stockeService, IDeleteService deleteService)
         {
             _repository = repository;
             _stockeService = stockeService;
+            _deleteService = deleteService;
         }
 
         // GET: api/Warehouses
@@ -103,9 +105,16 @@ namespace StorageManagement.API.Controllers
             {
                 return NotFound();
             }
-            await _repository.DeleteWarehouse(warehouseModel);
-
-            return warehouseModel;
+            if (await _deleteService.CanDeleteWarhouse(warehouseModel))
+            {
+                await _repository.DeleteWarehouse(warehouseModel);
+                return warehouseModel;
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
         }
     }
 }

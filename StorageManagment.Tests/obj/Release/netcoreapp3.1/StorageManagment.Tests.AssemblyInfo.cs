@@ -11,7 +11,7 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryContentRootAttribute("StorageManagement.API", "D:\\ASPNET\\StorageManagment\\StorageManagement\\StorageManagement.API", "StorageManagement.API.csproj", "0")]
+[assembly: Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryContentRootAttribute("StorageManagement.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "D:\\ASPNET\\StorageManagment\\StorageManagement\\StorageManagement.API", "StorageManagement.API.csproj", "0")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("StorageManagment.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]

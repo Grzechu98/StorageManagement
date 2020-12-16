@@ -54,8 +54,8 @@ namespace StorageManagement.API.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var jobject = await response.Content.ReadAsAsync<JObject>();
-                    contractor = new ContractorModel { Name = jobject["name"].ToString(), NIP = jobject["NIP"].ToString(), Racks = new List<StorageRackModel>() };
+                    var jobject = await response.Content.ReadAsAsync<ContractorModel>();
+                     contractor = new ContractorModel { Name = jobject.Name, NIP = jobject.NIP, Racks = new List<StorageRackModel>() };
                 }
             }
             
@@ -80,8 +80,8 @@ namespace StorageManagement.API.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var jobject = await response.Content.ReadAsAsync<JObject>();
-                    product = new ProductModel { Name = jobject["name"].ToString(), Value = Decimal.Parse(jobject["value"].ToString()) };
+                    var jobject = await response.Content.ReadAsAsync<ProductModel>();
+                    product = new ProductModel { Name = jobject.Name, Value = jobject.Value };
                 }
             }
             
