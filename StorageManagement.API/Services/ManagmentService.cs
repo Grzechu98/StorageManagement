@@ -13,7 +13,7 @@ namespace StorageManagement.API.Services
         Task<ProductModel> AllocateProductToStoragePlace(ProductModel product, int warehouseId);
         Task<ShelfModel> FindEmptySpace(int warehouseId);
         Task<ShelfModel> FindEmptySpace(int warehouseId,ContractorModel contractor);
-        Task<ContractorModel> AssingRackToContractor(ContractorModel contractor, int warehouseId);
+        Task<StorageRackModel> AssingRackToContractor(ContractorModel contractor, int warehouseId);
         Task<StorageRackModel> FindEmptyRack(int warehouseId);
     }
     public class ManagmentService : IManagmentService
@@ -53,7 +53,7 @@ namespace StorageManagement.API.Services
             return product;
         }
 
-        public async Task<ContractorModel> AssingRackToContractor(ContractorModel contractor, int warehouseId)
+        public async Task<StorageRackModel> AssingRackToContractor(ContractorModel contractor, int warehouseId)
         {
             var rack = await FindEmptyRack(warehouseId);
             if (rack != null)
@@ -61,7 +61,7 @@ namespace StorageManagement.API.Services
                 contractor.Racks.Add(rack);
                 await _contractorRepository.UpdateContractor(contractor);
             }
-            return contractor;
+            return rack;
         }
 
         public async Task<StorageRackModel> FindEmptyRack(int warehouseId)
@@ -70,11 +70,14 @@ namespace StorageManagement.API.Services
 
             foreach (var item in warehouse.StorageRacks.Where(s => s.Contractor == null && s.IsTaken == false))
             {
-                foreach (var i in item.Shelves)
+                if (item.Shelves.Where(s => s.Product != null).Any())
                 {
-                    if (i.Product != null) return null;
+
                 }
-                return item;
+                else
+                {
+                    return item;
+                }
             }
             return null;
         }

@@ -52,8 +52,8 @@ namespace StorageManagement.API.Controllers
             {
                 return BadRequest();
             }
-            await _managmentService.AssingRackToContractor(contractor, Int32.Parse(data["warehouseId"].ToString()));
-            return Ok();
+            var rack = await _managmentService.AssingRackToContractor(contractor, Int32.Parse(data["warehouseId"].ToString()));
+            return Ok(rack);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace StorageManagement.API.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_config.GetConnectionString("DevDb"));
+            optionsBuilder.UseSqlServer(_config.GetConnectionString("Db"));
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

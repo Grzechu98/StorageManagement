@@ -56,6 +56,7 @@ namespace StorageManagement.API.Services
                 {
                     var jobject = await response.Content.ReadAsAsync<ContractorModel>();
                      contractor = new ContractorModel { Name = jobject.Name, NIP = jobject.NIP, Racks = new List<StorageRackModel>() };
+                    await _contractorRepository.AddContractor(contractor);
                 }
             }
             
@@ -82,6 +83,7 @@ namespace StorageManagement.API.Services
                 {
                     var jobject = await response.Content.ReadAsAsync<ProductModel>();
                     product = new ProductModel { Name = jobject.Name, Value = jobject.Value };
+                   await _productrRepository.AddProduct(product);
                 }
             }
             
