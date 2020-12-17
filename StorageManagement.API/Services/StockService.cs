@@ -10,15 +10,17 @@ namespace StorageManagement.API.Services
     public class StockHelper {
         public int Quantity { get; set; }
         public decimal Value { get; set; }
+        public decimal SingleProductValue { get; set; }
 
         public StockHelper(int Quantity, decimal SingleProductValue)
         {
             this.Quantity = Quantity;
             this.Value = Quantity * SingleProductValue;
+            this.SingleProductValue = SingleProductValue;
         }
-        public void CountValue(decimal value)
+        public void CountValue()
         {
-            Value = Quantity * value;
+            Value = Quantity * SingleProductValue;
         }
     }
 
@@ -28,7 +30,7 @@ namespace StorageManagement.API.Services
         Task<IDictionary<string, int>> GetStockStatus(int id);
         Task<IDictionary<string, int>> GetStockStatus(int id,ContractorModel model);
         Task<IDictionary<string, StockHelper>> GetContractorStockDetails(int id,ContractorModel model);
-        Task<ICollection<IDictionary<string, StockHelper>>> GetContractorStockDetails(ContractorModel model);
+        Task<IDictionary<string, StockHelper>> GetContractorStockDetails(ContractorModel model);
 
     }
     public class StockService : IStockService
@@ -112,7 +114,7 @@ namespace StorageManagement.API.Services
                         if (result.ContainsKey(i.Product.Name))
                         {
                             result[i.Product.Name].Quantity++;
-                            result[i.Product.Name].CountValue(i.Product.Value);
+                            result[i.Product.Name].CountValue();
                         }
                         else
                         {
@@ -124,15 +126,27 @@ namespace StorageManagement.API.Services
             return result;
         }
 
-        public async Task<ICollection<IDictionary<string, StockHelper>>> GetContractorStockDetails(ContractorModel model)
+        public async Task<IDictionary<string, StockHelper>> GetContractorStockDetails(ContractorModel model)
         {
             var warehouses = await _repository.GetWarehouses();
 
-            IList<IDictionary<string, StockHelper>> result = new List<IDictionary<string, StockHelper>>();
+            IDictionary<string, StockHelper> result = new Dictionary<string, StockHelper>();
 
             foreach (var item in warehouses)
             {
-                result.Add(await GetContractorStockDetails(item.Id, model));
+                IDictionary<string, StockHelper> temp = await GetContractorStockDetails(item.Id, model);
+                foreach (var i in temp)
+                {
+                    if (result.ContainsKey(i.Key))
+                    {
+                        result[i.Key].Quantity++;
+                        result[i.Key].CountValue();
+                    }
+                    else
+                    {
+                        result.Add(i.Key, new StockHelper(i.Value.Quantity, i.Value.SingleProductValue));
+                    }
+                }
             }
 
             return result;
