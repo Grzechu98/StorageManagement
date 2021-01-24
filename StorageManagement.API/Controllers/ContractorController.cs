@@ -37,7 +37,12 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{NIP}/TotalStock")]
         public async Task<ActionResult<ContractorModel>> GetContractorModel(string NIP)
         {
-            var stock = await _stockeService.GetContractorStockDetails(await _repository.GetContractor(e => e.NIP == NIP));
+            var contractor = await _repository.GetContractor(e => e.NIP == NIP);
+            if (contractor == null)
+            {
+                return Ok(new Dictionary<string, StockHelper>());
+            }
+            var stock = await _stockeService.GetContractorStockDetails(contractor);
             if (stock == null)
             {
                 return NotFound();
@@ -49,7 +54,12 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{NIP}/WarehouseStock/{WarehouseId}")]
         public async Task<ActionResult<IDictionary<string,StockHelper>>> GetWarehouseStockDetails(string NIP,int warehouseId)
         {
-            var stock = await _stockeService.GetContractorStockDetails(warehouseId, await _repository.GetContractor(e => e.NIP == NIP));
+            var contractor = await _repository.GetContractor(e => e.NIP == NIP);
+            if(contractor == null)
+            {
+                return Ok(new Dictionary<string, StockHelper>());
+            }
+            var stock = await _stockeService.GetContractorStockDetails(warehouseId, contractor);
             if (stock == null)
             {
                 return NotFound();
@@ -62,9 +72,13 @@ namespace StorageManagement.API.Controllers
         [HttpGet("{NIP}/FreeStorageSpaceInWarehouse/{WarehouseId}")]
         public async Task<ActionResult<string>> GetFreeStorageSpaceInWarehouse(string NIP, int warehouseId)
         {
-            var stockStatus = await _stockeService.GetStockStatus(warehouseId, await _repository.GetContractor(e => e.NIP == NIP));
+            var contractor = await _repository.GetContractor(e => e.NIP == NIP);
+            if (contractor == null)
+            {
+                return NotFound();
+            }
+            var stockStatus = await _stockeService.GetStockStatus(warehouseId, contractor);
             return Ok(stockStatus);
         }
-
     }
 }

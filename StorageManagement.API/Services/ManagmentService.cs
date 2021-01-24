@@ -112,7 +112,6 @@ namespace StorageManagement.API.Services
                         item.CheckIfHasSpace();
                         return i; 
                     }
-                    
                 }
             }
             return null;

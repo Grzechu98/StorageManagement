@@ -35,6 +35,21 @@ namespace StorageManagement.API.Controllers
 
             return Ok(productModel);
         }
+        
+        // GET: api/Products/OwnedBy/12345678
+        [HttpGet("OwnedBy/{nip}")]
+        public async Task<ActionResult<ProductModel>> GetContractorsProducts(string nip)
+        {
+            var products = await _repository.GetProducts(e => e.Shelf != null);
+            var productswithcontarctors = products.Where(e => e.Shelf.Rack.Contractor != null);
+            var productsresult = productswithcontarctors.Where(e => e.Shelf.Rack.Contractor.NIP == nip);
+            if (productsresult == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(productsresult);
+        }
 
         // GET: api/Products/ByName/NAME
         [HttpGet("ByName/{Name}")]

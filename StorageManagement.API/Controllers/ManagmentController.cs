@@ -36,8 +36,14 @@ namespace StorageManagement.API.Controllers
         [HttpPost("PlaceContractorProduct")]
         public async Task<ActionResult<ProductModel>> PlaceProduct([FromBody] JObject data)
         {
-            var res = await _managmentService.AllocateProductToStoragePlace(await _communicationService.GetProduct(Int32.Parse(data["Id"].ToString())),
-                await _communicationService.GetContractor(data["NIP"].ToString()), Int32.Parse(data["warehouseId"].ToString()));
+            var product = await _communicationService.GetProduct((int)Int64.Parse(data["id"].ToString()), data["NIP"].ToString());
+            var contractor = await _communicationService.GetContractor(data["NIP"].ToString());
+            if (contractor == null)
+            {
+                return BadRequest();
+            }
+
+            var res = await _managmentService.AllocateProductToStoragePlace(product, contractor, (int)Int64.Parse(data["warehouseId"].ToString()));
             if (res.Shelf == null)
             {
                 return BadRequest();
