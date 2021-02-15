@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moduł zarządzania przechowywaniem</title>
+
+    <script src="https://kit.fontawesome.com/be023973b7.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="modal" id="contractorsProductsModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Produkty:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="resultt">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="modal" id="assignRack" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Przypisz</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form class="m-3" id="assignRackForm" >
+                  <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">NIP:</label>
+                    <input type="text" class="form-control" name="NIPInput" id="NIPInput" disabled required>
+                  </div>
+                  <div id="warehousesinput"></div>
+                 <div class="modal-footer">
+                   <div id="assignRackErr"></div>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                 <button type="submit" class="btn btn-primary">Przypisz</button>
+                 </div>
+                 </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="stockStatusModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Pełen stan magazynowy</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="contStatus"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #dfe1e4;">
+      <a class="navbar-brand lead" href="index.html">Zarządzanie przechowywyaniem</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="products.html"><i class="fas fa-box"></i> Produkty <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contractors.html"><i class="fas fa-user-tie"></i> Kontrahenci</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+<br><br>
+    <article class="container mb-5"> 
+      <form id="contractorsForm">
+        <div class="form-row align-items-center">
+          <div class="col-auto"> 
+            <div class="input-group mb-2">
+              <input type="text" placeholder="NIP" class="form-control" id="NIPIn" name="NIPIn" required>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button type='button' onclick="showAssignRackModal(document.getElementById('NIPIn').value)" class='btn btn-primary mr-1'><i class='far fa-edit'></i> Przydziel regał</button>
+          </div>
+          <div class="col-auto">
+            <button type='button' onclick="showStockModal(document.getElementById('NIPIn').value)" class='btn btn-primary mr-1'><i class='fas fa-boxes'></i> Pokaż stan magazynowy</button>
+          </div>
+          <div class="col-auto">
+            <button type='button' onclick="showContractorProducts(document.getElementById('NIPIn').value)" class='btn btn-primary mr-1'><i class="fas fa-box"></i> Wyszukaj produkty kontrahenta</button>
+          </div>
+        </div>
+      </form>
+
+
+
+        <div id="contractors"></div>
+    </article>
+    <br><br>
+    <footer id="footer-main" class="fixed-bottom mt-5">
+        <h4 class="lead justify-content-center">Moduł zarządzania przechowywaniem</h4>
+    </footer>
+    <script src="js/ApiComunicationObject.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script>
+
+      ApiComunicator.fetchWarehouses().then(data=>{
+          let input ="<div class='form-group'><label for='wh'>Wybierz magazyn</label><select class='form-control' id='WarehouseSelect'>";
+              data.forEach(element => {
+                input += "<option value='"+element.id+"'>"+element.name+"</option>"
+              });
+            input += "</select></div>";
+            document.querySelector("#warehousesinput").innerHTML = input; 
+        });
+      function showAssignRackModal(NIP){
+        console.log(NIP);
+        if(NIP == null || NIP == ""){
+          document.querySelector("#assignRackErr").innerHTML = "<h4>Podano błędny NIP</h4>";
+          $('#assignRack').modal('show');
+        }else{
+        const editform = document.getElementById('assignRackForm');
+          editform['NIPInput'].value = NIP;
+          document.querySelector("#assignRackErr").innerHTML = "";
+          $('#assignRack').modal('show');
+      }
+    }
+      const editform = document.getElementById('assignRackForm');
+      editform.addEventListener('submit',function(e){
+            e.preventDefault();
+            
+            const rqbody = {
+                NIP: editform['NIPInput'].value,
+                warehouseId: editform['WarehouseSelect'].value
+            }
+            ApiComunicator.assignRack(rqbody);
+            }); 
+      function showStockModal(NIP){
+        if(NIP == null || NIP == ""){
+          document.querySelector("#contStatus").innerHTML = "<h4>Podano błędny NIP</h4>";
+          $('#stockStatusModal').modal('show');
+        }else{
+          fetch("http://localhost:56819/api/Contractor/"+NIP+"/TotalStock",{
+          method: 'GET'
+        }).then(res => res.json()).then(data =>{
+            if(!Object.keys(data).length){  
+              document.querySelector("#contStatus").innerHTML = "<h4>Ten kontrahent nie przechowuje aktualnie żadnych produktów</h4>";
+            }else{
+              let tab = "<table class='table table-sm' id='warehousesTable'><thead><tr><th scope='col'></th><th scope='col'>Ilość sztuk</th><th scope='col'>Wartość</th></tr></thead><tbody>"; 
+              for(k in data){
+                tab+="<tr><th scope=row>"+k+"</th><th>"+data[k].quantity+"</th><th>"+data[k].value+"</th></tr>";
+              }
+              tab +="</tbody></table><hr>";
+              document.querySelector("#contStatus").innerHTML = tab;
+            }
+        });
+        
+        $('#stockStatusModal').modal('show'); 
+        } 
+      }    
+      function showContractorProducts(NIP){
+        if(NIP == null || NIP == ""){
+          document.querySelector("#resultt").innerHTML = "<h4>Podano błędny NIP</h4>";
+          $('#contractorsProductsModal').modal('show');
+        }else{
+          fetch("http://localhost:56819/api/Products/OwnedBy/"+NIP,{
+          method: 'GET'
+        }).then(res => res.json()).then(data =>{
+            if(!Object.keys(data).length){  
+              document.querySelector("#resultt").innerHTML = "<h4>Ten kontrahent nie przechowuje aktualnie żadnych produktów</h4>";
+            }else{
+              let tab = "<table class='table table-sm' id='resTab'><thead><tr><th scope='col'>Nazwa</th><th scope='col'>Regał</th><th>Półka</th><th>Identyfikator Magazynu</th><th>Wartość</th></tr></thead><tbody>";
+                data.forEach(element => {
+                  if(element.shelf != null){
+                  tab += "<tr><th scope=row>"+element.name+"</th><th>"+element.shelf.rack.rackNumber+"</th><th>"+element.shelf.shelfNumber+"</th><th>"+element.shelf.rack.warehouseId+"</th><th>"+element.value+"</th></tr>";
+                }
+                });
+                tab +="</tbody></table><hr>";
+              document.querySelector("#resultt").innerHTML = tab;
+            }
+        });
+        
+        $('#contractorsProductsModal').modal('show'); 
+        }
+         
+      } 
+     
+    </script>  
+</body>
+</html>

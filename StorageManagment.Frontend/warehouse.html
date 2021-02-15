@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moduł zarządzania przechowywaniem</title>
+
+    <script src="https://kit.fontawesome.com/be023973b7.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="modal" id="AddRackModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Dodaj regał</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form class="m-3" id="addRackForm" >
+                    <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Numer Regału:</label>
+                    <input type="text" class="form-control" name="RackNo" id="RackNo" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Liczba półek:</label>
+                    <input type="number" class="form-control" name="shelvesNo" id="shelvesNo" required>
+                  </div>
+                 <div class="modal-footer">
+                   <div id="AddRackErr"></div>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                 <button type="submit" class="btn btn-primary">Zapisz</button>
+                 </div>
+                 </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="EditRackModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edytuj regał</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <form class="m-3" id="editRackForm" >
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">ID:</label>
+                  <input type="text" class="form-control" name="editrackId" id="editrackId" disabled required>
+                </div>
+                  <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Numer Regału:</label>
+                  <input type="text" class="form-control" name="eRackNo" id="eRackNo" required>
+                </div>
+               <div class="modal-footer">
+                 <div id="EditRackErr"></div>
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+               <button type="submit" class="btn btn-primary">Zapisz</button>
+               </div>
+               </form>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="modal" id="stockStatusModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Stan Magazynowy</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="status"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #dfe1e4;">
+        <a class="navbar-brand lead" href="index.html">Zarządzanie przechowywyaniem</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="products.html"><i class="fas fa-box"></i> Produkty <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contractors.html"><i class="fas fa-user-tie"></i> Kontrahenci</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+<br><br>
+    <article class="container mb-5">  
+        <div id="warehouse"></div>
+        <div class='d-flex flex-row-reverse'><button type='button' class='btn btn-success m-3' onclick='prepareAddModal()' data-toggle='modal' data-target='#AddRackModal'><i class='fas fa-plus'></i> Dodaj</button></div>
+        <h4>Regały: </h4>
+        <div id="myGroup">
+          <button class="btn btn-primary dropdown" data-toggle="collapse" data-target="#racksAcc"><i class="icon-chevron-right"></i> Regały </button>
+          <button class="btn btn-primary dropdown" data-toggle="collapse" data-target="#contractorsAcc"><i class="icon-chevron-right"></i> Kontrahenci</button>
+          
+          <div class="accordion-group">
+              <div class="collapse indent" id="racksAcc"  data-parent="#myGroup">
+                <div id="racksTable"></div>
+              </div>
+          
+              <div class="collapse indent" id="contractorsAcc"  data-parent="#myGroup">
+                <div id="contractorsTab"></div>
+              </div>
+          </div>
+    </article>
+    <br><br>
+    <footer id="footer-main" class="fixed-bottom mt-5">
+        <h4 class="lead justify-content-center">Moduł zarządzania przechowywaniem</h4>
+    </footer>
+    <script src="js/ApiComunicationObject.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script>
+        function preparePage(){
+            let id = sessionStorage.getItem("WarhouseId");
+        ApiComunicator.getWarehouse(id).then(data =>{
+          console.log(data);
+            let card = "<div class='card text-center m-5'><div class='card-header'><h5><strong>"+data['name']+"</strong></h5></div><div class='card-body'><p class='card-text'><strong>Adres:</strong></p><p class='card-text'>"+data['city']+", "+data['street']+" "+data['unitNumber']+" "+data['postCode']+"</p>"
+            card += "<div class='d-flex flex-row-reverse'><button type='button' class='btn btn-info m-3' onclick='showStockStatus()'><i class='fas fa-info-circle'></i></button></div></div></div>"
+            document.querySelector("#warehouse").innerHTML = card; 
+            let racks = "<table class='table table-sm' id='RackTable'><thead><tr><th scope='col'>Numer Regału</th><th scope='col'>Właściciel</th></tr></thead><tbody>";
+            let contractors ="<table class='table table-sm' id='RackTable'><thead><tr><th scope='col'>Nazwa</th><th scope='col'>NIP</th><th scope='col'></th></tr></thead><tbody>";
+            let map = new Map();    
+              data['storageRacks'].forEach(element =>{
+                racks +="<tr><td>"+element.rackNumber+"</td>";
+                if(element.contractor === null){
+                    racks += "<td> Brak przypisanego kontrahenta </td><td><button type='button' onclick='showEditModal("+element.id+","+"\""+element.rackNumber+"\")' class='btn btn-primary mr-1'><i class='far fa-edit'></i></button><button type='button' onclick='goToRack("+element.id+")' class='btn btn-secondary mr-1'>Szczegóły</button><button type='button' onclick='delRack("+element.id+")' class='btn btn-danger'><i class='fas fa-trash'></i></button></td></tr>";
+                }else{
+                    racks += "<td>"+element.contractor.name+"</td><td><button type='button' onclick='showEditModal("+element.id+","+"\""+element.rackNumber+"\")' class='btn btn-primary mr-1'><i class='far fa-edit'></i></button><button type='button' onclick='goToRack("+element.id+")' class='btn btn-secondary mr-1'>Szczegóły</button><button type='button' onclick='delRack("+element.id+")' class='btn btn-danger'><i class='fas fa-trash'></i></button></td></tr>";
+                    map.set(element.contractor.nip, element.contractor);
+                  }
+            })
+            map.forEach(element => {
+              contractors += "<tr><th>"+element.name+"</th> <td>"+element.nip+"</td><td><button type='button' onclick='showStockModal("+element.nip+")' class='btn btn-primary mr-1'><i class='fas fa-boxes'></i> Pokaż stan magazynowy</button></td></tr>";
+            });
+            document.querySelector("#racksTable").innerHTML = racks; 
+            document.querySelector("#contractorsTab").innerHTML = contractors; 
+        });
+      
+        }
+        preparePage();
+        function showStockStatus(){
+            let id = sessionStorage.getItem("WarhouseId");
+            ApiComunicator.getWarehouseStockStatus(id).then(data =>{
+            let stock = "<p>Wolne miejsce: "+data['FreeSpace']+"</p><p>Zajęte miejsce: "+data['TakenSpace']+"</p><p>Całkowita pojemność: "+data['TotalSpace']+"</p>";
+            document.querySelector("#status").innerHTML = stock; 
+        });
+        $('#stockStatusModal').modal('show');
+        }
+        function showEditModal(id,rackNumber){
+          const editform = document.getElementById('editRackForm');
+          editform['eRackNo'].value = rackNumber;
+          editform['editrackId'].value = id;
+          document.querySelector("#EditRackErr").innerHTML = ""; 
+          $('#EditRackModal').modal('show');
+        }
+        function delRack(id){
+          ApiComunicator.deleteRack(id);
+        }
+        function prepareAddModal(){
+          const addform = document.getElementById('addRackForm');
+          addform['RackNo'].value = null;
+          addform['shelvesNo'].value = null;
+          document.querySelector("#AddRackErr").innerHTML = "";
+        }
+        const addform = document.getElementById('addRackForm');
+        addform.addEventListener('submit',function(e){
+            e.preventDefault();
+            
+            const warehouse = {
+                RackNumber: addform['RackNo'].value,
+                IsTaken : false,
+                WarehouseId : sessionStorage.getItem("WarhouseId")
+            }
+            ApiComunicator.postStorageRack(warehouse).then(data =>{
+                for (let index = 0; index < addform['shelvesNo'].value; index++) {
+                const shelf = {
+                    ShelfNumber: index+1,
+                    Quantity:0,
+                    RackId: data['id']
+                }
+                ApiComunicator.postShelf(shelf);
+            }
+            preparePage();
+            $('#AddRackModal').modal('hide');
+            });
+        });
+        const editform = document.getElementById('editRackForm');
+        editform.addEventListener('submit',function(e){
+            e.preventDefault();
+            
+            const rack = {
+                id: editform['editrackId'].value,
+                RackNumber: editform['eRackNo'].value,
+                IsTaken : false,
+                WarehouseId : sessionStorage.getItem("WarhouseId")
+            }
+              ApiComunicator.putStorageRack(rack);
+            }); 
+
+        function goToRack(id){
+        sessionStorage.setItem("RackId",id);
+        window.location='rack.html';
+      }
+      function showStockModal(NIP){
+        let id = sessionStorage.getItem("WarhouseId");
+        let tab ="";
+        fetch("http://localhost:56819/api/Contractor/"+NIP+"/FreeStorageSpaceInWarehouse/"+id,{
+          method: 'GET'
+        }).then(res => res.json()).then(data =>{
+          tab += "<p>Wolne miejsce: "+data['FreeSpace']+" Zajęte miejsce: "+data['TakenSpace']+" Całkowita pojemność: "+data['TotalSpace']+"</p>";
+        });
+        
+        fetch("http://localhost:56819/api/Contractor/"+NIP+"/WarehouseStock/"+id,{
+          method: 'GET'
+        }).then(res => res.json()).then(data =>{
+            if(!Object.keys(data).length){  
+             document.querySelector("#status").innerHTML = "<h4>Ten kontrahent nie przechowuje aktualnie żadnych produktów</h4>";
+            }else{
+              tab += "<table class='table table-sm' id='warehousesTable'><thead><tr><th scope='col'></th><th scope='col'>Ilość sztuk</th><th scope='col'>Wartość</th></tr></thead><tbody>"; 
+              for(k in data){
+                tab += "<tr><th scope=row>"+k+"</th><th>"+data[k].quantity+"</th><th>"+data[k].value+"</th></tr>";
+              }
+              tab +="</tbody></table><hr>";
+            }
+            document.querySelector("#status").innerHTML = tab;
+        });
+
+        $('#stockStatusModal').modal('show');  
+      }    
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moduł zarządzania przechowywaniem</title>
+    <script src="https://kit.fontawesome.com/be023973b7.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="modal" id="findModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Wyszukiwanie</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="resultt">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="placeProduct" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Przypisz produkt</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form class="m-3" id="placeProductForm" >
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Id:</label>
+                <input type="text" class="form-control" name="Id" id="Id" disabled required>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Nazwa:</label>
+                <input type="text" class="form-control" name="name" id="name" disabled required>
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">NIP: (opcjonalne)</label>
+                <input type="text" class="form-control" name="nip" id="nip" >
+              </div>
+              <div id="warehousesinput"></div>
+             <div class="modal-footer">
+               <div id="placeProductErr"></div>
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+             <button type="submit" class="btn btn-primary">Przydziel miejsce</button>
+             </div>
+             </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="productPlaceModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Miejsce przypisania:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="placedProduct"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #dfe1e4;">
+      <a class="navbar-brand lead" href="index.html">Zarządzanie przechowywyaniem</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="products.html"><i class="fas fa-box"></i> Produkty <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contractors.html"><i class="fas fa-user-tie"></i> Kontrahenci</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+<br><br>
+    <article class="container mb-5"> 
+      <h2 class="pb-3">Produkty</h2> 
+      <form id="searchform" class="pb-3 form-inline">
+        <input class="form-control mr-sm-2" id="searchtext" type="search" placeholder="Wpisz nazwę produktu" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+      </form>
+      <h3 class="pb-3">Produkty z modułu produktów i usług</h3> 
+        <div id="products"></div>
+    </article>
+    <br><br>
+    <footer id="footer-main" class="fixed-bottom mt-5">
+        <h4 class="lead justify-content-center">Moduł zarządzania przechowywaniem</h4>
+    </footer>
+    <script src="js/ApiComunicationObject.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script>
+      function preparePage(){
+        let table ="";//https://zuip.herokuapp.com/list_prod_us? http://my-json-server.typicode.com/Grzechu98/demo/products
+        fetch('https://zuip.herokuapp.com/list_prod_us',{
+          method: 'GET'
+        }).then(res => res.json()).then(data => {
+          console.log(data);
+          table = "<table class='table table-sm' id='products'><thead><tr><th scope='col'>Nazwa</th><th scope='col'>Wartość</th><th scope='col'></th></tr></thead><tbody>"; 
+          data.forEach(element => {
+            if(element.produkt_usluga === 0){
+              table +="<tr><th>"+element.nazwa+"</th> <td>"+element.cena_netto+"</td><td><button type='button' onclick='showPlaceProduct("+element.id_produktu+",\""+element.nazwa+"\")' class='btn btn-primary mr-1'><i class='fas fa-pallet'></i> Umieść produkt w magazynie</button></td></tr>";
+            }
+          });
+          table +="</tbody></table><hr>";
+              document.querySelector("#products").innerHTML = table; 
+        });
+      }
+      ApiComunicator.fetchWarehouses().then(data=>{
+          let input ="<div class='form-group'><label for='wh'>Wybierz magazyn</label><select class='form-control' id='WarehouseSelect'>";
+              data.forEach(element => {
+                input += "<option value='"+element.id+"'>"+element.name+"</option>"
+              });
+            input += "</select></div>";
+            document.querySelector("#warehousesinput").innerHTML = input; 
+        });
+      function showPlaceProduct(Id, name){
+        const editform = document.getElementById('placeProductForm');
+          editform['Id'].value = Id;
+          editform['name'].value = name;
+          editform['nip'].value = "";
+          document.querySelector("#placeProductErr").innerHTML = "";
+          $('#placeProduct').modal('show');
+      }
+      const editform = document.getElementById('placeProductForm');
+      editform.addEventListener('submit',function(e){
+            e.preventDefault();
+            if(editform['nip'].value == null || editform['nip'].value == ""){
+              const rqbody = {
+                id: editform['Id'].value,
+                warehouseId: editform['WarehouseSelect'].value
+            }
+            console.log(rqbody);
+            ApiComunicator.placeProduct(rqbody);
+            }else{
+              const rqbody = {
+                id: editform['Id'].value,
+                NIP: editform['nip'].value,
+                warehouseId: editform['WarehouseSelect'].value
+            }
+            console.log(rqbody);
+            ApiComunicator.placeProductWithContractor(rqbody);
+            }
+            });    
+            const search = document.getElementById('searchform');
+            search.addEventListener('submit',function(e){
+            e.preventDefault();
+            fetch('http://localhost:56819/api/Products/ByName/'+search['searchtext'].value,{
+             method: 'GET'
+           }).then(res => {
+             if(!res.ok){
+            document.querySelector("#resultt").innerHTML = "<p style='color:red;'>Brak wyników</p>"; 
+            $('#findModal').modal('show');
+          }else{
+            res.json().then(data =>{
+              let tab = "<table class='table table-sm' id='resTab'><thead><tr><th scope='col'>Nazwa</th><th scope='col'>Regał/półka</th></tr></thead><tbody>";
+                data.forEach(element => {
+                  if(element.shelf != null){
+                  tab += "<tr><th scope=row>"+element.name+"</th><th>"+element.shelf.rack.rackNumber+" / "+element.shelf.shelfNumber+"</th></tr>";
+                }
+                });
+                tab +="</tbody></table><hr>";
+                document.querySelector("#resultt").innerHTML = tab; 
+                $('#findModal').modal('show');
+            });
+          }
+          });
+            });    
+      
+            preparePage();
+    </script>  
+  </body>
+</html>

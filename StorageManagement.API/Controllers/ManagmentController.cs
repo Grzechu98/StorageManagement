@@ -56,7 +56,7 @@ namespace StorageManagement.API.Controllers
             var contractor = await _communicationService.GetContractor(data["NIP"].ToString());
             if (contractor == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             var rack = await _managmentService.AssingRackToContractor(contractor, Int32.Parse(data["warehouseId"].ToString()));
             return Ok(rack);
